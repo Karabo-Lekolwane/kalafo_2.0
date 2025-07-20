@@ -448,6 +448,6 @@ if __name__ == '__main__':
         db.create_all()
         print("✅ Database tables ensured")
     
-    # Use environment PORT for production
+    # Get port from environment
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(debug=False, host='0.0.0.0', port=port)
