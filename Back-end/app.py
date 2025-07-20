@@ -24,14 +24,9 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 CORS(app, 
-     origins=[
-         "http://localhost:3000",
-         "https://kalafo-2-0.vercel.app",
-         "https://*.vercel.app"
-     ], 
-     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
-     allow_headers=["Content-Type", "Authorization"],
-     supports_credentials=True
+     origins="*",  # Allow all origins for now
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization"]
 )
 # User Model
 class User(db.Model):
