@@ -5,7 +5,7 @@ import Landing from './pages/Landing/Landing';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import AdminDashboard from './pages/Dashboard/AdminDashboard';
-import DoctorDashboard from './pages/Dashboard/DoctorDashboard';
+import DoctorDashboard from './pages/Dashboard/DoctorDashboard/DoctorDashboard';
 import PatientDashboard from './pages/Dashboard/PatientDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
@@ -27,7 +27,7 @@ function App() {
             } 
           />
           <Route 
-            path="/doctor-dashboard" 
+            path="/Doctordashboard/doctor-dashboard" 
             element={
               <ProtectedRoute allowedRoles={['doctor']}>
                 <DoctorDashboard />

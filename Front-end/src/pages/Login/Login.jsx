@@ -5,6 +5,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './Login.css';
 
+
 // Import icons for visual enhancement
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaStethoscope, FaShieldAlt, FaUserMd } from 'react-icons/fa';
 
@@ -48,7 +49,7 @@ function Login() {
         if (role === 'admin') {
           navigate('/admin-dashboard');
         } else if (role === 'doctor') {
-          navigate('/doctor-dashboard');
+          navigate('/doctordashboard');
         } else {
           navigate('/patient-dashboard');
         }
@@ -80,7 +81,7 @@ function Login() {
         if (role === 'admin') {
           navigate('/admin-dashboard');
         } else if (role === 'doctor') {
-          navigate('/doctor-dashboard');
+          navigate('/doctordashboard');
         } else {
           navigate('/patient-dashboard');
         }
