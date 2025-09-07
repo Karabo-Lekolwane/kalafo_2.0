@@ -54,16 +54,16 @@ const DashboardSidebar = ({ activeTab, setActiveTab }) => {
   ];
 
   return (
-    <aside className="w-72 bg-white/95 backdrop-blur-sm border-r border-medical-border shadow-medical h-[calc(100vh-88px)] sticky top-[88px]">
-      <div className="p-6 h-full flex flex-col">
+    <aside className="dashboard-sidebar">
+      <div className="dashboard-sidebar-content">
         {/* Navigation Header */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-foreground mb-2">Navigation</h3>
-          <div className="h-1 w-12 bg-gradient-to-r from-medical-primary to-medical-secondary rounded-full"></div>
+        <div className="dashboard-sidebar-header">
+          <h3 className="dashboard-sidebar-title">Navigation</h3>
+          <div className="dashboard-sidebar-header-underline"></div>
         </div>
 
         {/* Navigation Menu */}
-        <nav className="space-y-1 flex-1">
+        <nav className="dashboard-sidebar-nav">
           {menuItems.map((item) => {
             const IconComponent = item.icon;
             const isActive = activeTab === item.id;
@@ -72,39 +72,23 @@ const DashboardSidebar = ({ activeTab, setActiveTab }) => {
               <Button
                 key={item.id}
                 variant="ghost"
-                className={cn(
-                  "w-full justify-start h-auto p-4 text-left transition-all duration-300 rounded-xl group",
-                  isActive 
-                    ? "bg-gradient-to-r from-medical-primary to-medical-secondary text-white shadow-medical-glow scale-105" 
-                    : "hover:bg-medical-card hover:scale-102 text-foreground hover:shadow-card"
-                )}
+                className={`dashboard-sidebar-item ${isActive ? 'dashboard-sidebar-item-active' : ''}`}
                 onClick={() => setActiveTab(item.id)}
               >
-                <div className="flex items-center gap-4 w-full">
-                  <div className={cn(
-                    "p-2 rounded-lg transition-all duration-300",
-                    isActive 
-                      ? "bg-white/20 text-white" 
-                      : "bg-medical-primary/10 text-medical-primary group-hover:bg-medical-primary/20"
-                  )}>
-                    <IconComponent className="h-5 w-5 flex-shrink-0" />
+                <div className="dashboard-sidebar-item-content">
+                  <div className={`dashboard-sidebar-icon-container ${isActive ? 'dashboard-sidebar-icon-active' : ''}`}>
+                    <IconComponent className="dashboard-sidebar-icon" />
                   </div>
-                  <div className="flex-1">
-                    <div className={cn(
-                      "font-medium text-sm",
-                      isActive ? "text-white" : "text-foreground"
-                    )}>
+                  <div className="dashboard-sidebar-text">
+                    <div className={`dashboard-sidebar-label ${isActive ? 'dashboard-sidebar-label-active' : ''}`}>
                       {item.label}
                     </div>
-                    <div className={cn(
-                      "text-xs mt-1 leading-tight",
-                      isActive ? "text-white/80" : "text-muted-foreground"
-                    )}>
+                    <div className={`dashboard-sidebar-description ${isActive ? 'dashboard-sidebar-description-active' : ''}`}>
                       {item.description}
                     </div>
                   </div>
                   {isActive && (
-                    <div className="w-1 h-8 bg-white/50 rounded-full"></div>
+                    <div className="dashboard-sidebar-active-indicator"></div>
                   )}
                 </div>
               </Button>
@@ -113,24 +97,24 @@ const DashboardSidebar = ({ activeTab, setActiveTab }) => {
         </nav>
 
         {/* Enhanced Bottom Actions */}
-        <div className="mt-6 space-y-3 border-t border-medical-border pt-6">
+        <div className="dashboard-sidebar-bottom">
           <Button
             variant="ghost"
-            className="w-full justify-start text-foreground hover:bg-medical-card hover:scale-102 transition-all duration-300 rounded-xl p-3"
+            className="dashboard-sidebar-bottom-button"
           >
-            <div className="p-2 bg-medical-primary/10 rounded-lg mr-3">
-              <Settings className="h-4 w-4 text-medical-primary" />
+            <div className="dashboard-sidebar-bottom-icon-container">
+              <Settings className="dashboard-sidebar-bottom-icon" />
             </div>
-            <span className="font-medium">Settings</span>
+            <span className="dashboard-sidebar-bottom-text">Settings</span>
           </Button>
           <Button
             variant="ghost"
-            className="w-full justify-start text-medical-error hover:bg-red-50 hover:scale-102 transition-all duration-300 rounded-xl p-3"
+            className="dashboard-sidebar-bottom-button dashboard-sidebar-logout-button"
           >
-            <div className="p-2 bg-medical-error/10 rounded-lg mr-3">
-              <LogOut className="h-4 w-4" />
+            <div className="dashboard-sidebar-bottom-icon-container dashboard-sidebar-logout-icon-container">
+              <LogOut className="dashboard-sidebar-bottom-icon" />
             </div>
-            <span className="font-medium">Logout</span>
+            <span className="dashboard-sidebar-bottom-text">Logout</span>
           </Button>
         </div>
       </div>

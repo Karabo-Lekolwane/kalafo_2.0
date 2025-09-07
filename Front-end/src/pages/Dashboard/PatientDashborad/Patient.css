@@ -1,0 +1,1009 @@
+/* Patient Dashboard Styles */
+
+/* Layout */
+.patient-dashboard {
+    min-height: 100vh;
+    background-color: hsl(240, 15%, 98%);
+  }
+  
+  /* Loading and Error States */
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+  }
+  
+  .loading-spinner {
+    font-size: 1.2rem;
+    color: hsl(215.4, 16.3%, 46.9%);
+  }
+  
+  .error-container {
+    text-align: center;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 2rem;
+  }
+  
+  .error-container h2 {
+    color: hsl(0, 84%, 60%);
+    margin-bottom: 1rem;
+  }
+  
+  .retry-button {
+    background-color: hsl(197, 89%, 48%);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+  
+  .retry-button:hover {
+    background-color: hsl(197, 89%, 42%);
+  }
+  
+  /* Enhanced Card Styles for Patient Dashboard */
+  .enhanced-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .enhanced-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin-bottom: 1rem;
+  }
+  
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .stat-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .stat-icon {
+    font-size: 2rem;
+  }
+  
+  .stat-content {
+    flex: 1;
+  }
+  
+  .stat-number {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: hsl(215, 25%, 27%);
+  }
+  
+  .stat-label {
+    font-size: 0.875rem;
+    color: hsl(215.4, 16.3%, 46.9%);
+  }
+  
+  /* Today's Appointments */
+  .today-appointments {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .appointment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: hsl(210, 40%, 98%);
+    border-radius: 0.5rem;
+    border: 1px solid hsl(214.3, 31.8%, 91.4%);
+  }
+  
+  .appointment-time {
+    font-weight: 600;
+    color: hsl(197, 89%, 48%);
+    min-width: 80px;
+  }
+  
+  .appointment-patient {
+    flex: 1;
+    margin: 0 1rem;
+  }
+  
+  .appointment-patient strong {
+    color: hsl(215, 25%, 27%);
+  }
+  
+  .appointment-patient p {
+    color: hsl(215.4, 16.3%, 46.9%);
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+  }
+  
+  .appointment-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  /* Quick Actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .action-button {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    border: none;
+  }
+  
+  .action-button.primary {
+    background-color: hsl(197, 89%, 48%);
+    color: white;
+  }
+  
+  .action-button.primary:hover {
+    background-color: hsl(197, 89%, 42%);
+  }
+  
+  .action-button.secondary {
+    background-color: hsl(173, 58%, 39%);
+    color: white;
+  }
+  
+  .action-button.secondary:hover {
+    background-color: hsl(173, 58%, 34%);
+  }
+  
+  .action-button.outline {
+    background-color: transparent;
+    border: 1px solid hsl(214.3, 31.8%, 91.4%);
+    color: hsl(215, 25%, 27%);
+  }
+  
+  .action-button.outline:hover {
+    background-color: hsl(210, 40%, 98%);
+  }
+  
+  /* Health Vitals */
+  .health-vitals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .vital-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 1px solid hsl(214.3, 31.8%, 91.4%);
+  }
+  
+  .vital-icon {
+    font-size: 1.5rem;
+    color: hsl(197, 89%, 48%);
+  }
+  
+  .vital-info h4 {
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin-bottom: 0.25rem;
+  }
+  
+  .vital-info p {
+    color: hsl(215.4, 16.3%, 46.9%);
+    font-size: 0.875rem;
+  }
+  
+  /* Doctors List */
+  .doctors-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .doctor-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .doctor-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .doctor-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .doctor-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: hsl(197, 89%, 48%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+  
+  .doctor-info h3 {
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin-bottom: 0.25rem;
+  }
+  
+  .doctor-info p {
+    color: hsl(215.4, 16.3%, 46.9%);
+    font-size: 0.875rem;
+  }
+  
+  .doctor-specialty {
+    background-color: hsl(142.1, 76.2%, 36.3%);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .doctor-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  /* Medical Records */
+  .medical-records {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .record-section {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+  }
+  
+  .record-section h3 {
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin-bottom: 1rem;
+  }
+  
+  .record-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .record-item {
+    padding: 0.75rem;
+    background-color: hsl(210, 40%, 98%);
+    border-radius: 0.5rem;
+  }
+  
+  .record-item h4 {
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin-bottom: 0.25rem;
+  }
+  
+  .record-item p {
+    color: hsl(215.4, 16.3%, 46.9%);
+    font-size: 0.875rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .quick-actions {
+      grid-template-columns: 1fr;
+    }
+    
+    .health-vitals {
+      grid-template-columns: 1fr;
+    }
+    
+    .doctors-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .appointment-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .appointment-actions {
+      align-self: stretch;
+      justify-content: flex-end;
+    }
+  }
+  
+  /* Video Consultation Styles */
+  .video-consultation-container {
+    height: 100vh;
+    background-color: hsl(215, 25%, 27%);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .video-header {
+    background-color: hsl(215, 25%, 27%);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .video-content {
+    flex: 1;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .video-main {
+    flex: 1;
+    background-color: hsl(215, 25%, 27%);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .video-sidebar {
+    width: 300px;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .video-controls {
+    padding: 1rem;
+    background-color: hsl(215, 25%, 27%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .control-button {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .control-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .control-button.end-call {
+    background-color: hsl(0, 84%, 60%);
+    color: white;
+  }
+  
+  /* Patient Dashboard Specific Overrides */
+  .patient-dashboard .dashboard-header {
+    background: linear-gradient(135deg, hsl(197, 89%, 48%) 0%, hsl(197, 89%, 42%) 100%);
+  }
+  
+  .patient-dashboard .dashboard-sidebar-item-active {
+    background-color: hsl(197, 89%, 48%);
+    color: white;
+  }
+  
+  .patient-dashboard .dashboard-sidebar-item-active .dashboard-sidebar-icon {
+    color: white;
+  }
+  
+  .patient-dashboard .dashboard-sidebar-item-active .dashboard-sidebar-label,
+  .patient-dashboard .dashboard-sidebar-item-active .dashboard-sidebar-description {
+    color: white;
+  }
+  
+  .patient-dashboard .dashboard-quick-stat-primary {
+    color: hsl(197, 89%, 48%);
+  }
+  
+  .patient-dashboard .overview-stat-card-primary {
+    background: linear-gradient(135deg, hsl(197, 89%, 48%) 0%, hsl(197, 89%, 42%) 100%);
+    color: white;
+  }
+  
+  .patient-dashboard .overview-stat-card-primary .overview-stat-label,
+  .patient-dashboard .overview-stat-card-primary .overview-stat-value {
+    color: white;
+  }
+  
+  .patient-dashboard .overview-action-btn-primary {
+    background-color: hsl(197, 89%, 48%);
+    color: white;
+  }
+  
+  .patient-dashboard .overview-action-btn-primary:hover {
+    background-color: hsl(197, 89%, 42%);
+  }
+  
+  /* Enhanced Overview Styles */
+  .overview-container {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .overview-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .overview-stat-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .overview-stat-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .overview-stat-card-primary {
+    background: linear-gradient(135deg, hsl(197, 89%, 48%) 0%, hsl(197, 89%, 42%) 100%);
+    color: white;
+  }
+  
+  .overview-stat-card-secondary {
+    background: linear-gradient(135deg, hsl(173, 58%, 39%) 0%, hsl(173, 58%, 34%) 100%);
+    color: white;
+  }
+  
+  .overview-stat-card-active {
+    background: linear-gradient(135deg, hsl(142.1, 76.2%, 36.3%) 0%, hsl(142, 76%, 32%) 100%);
+    color: white;
+  }
+  
+  .overview-stat-card-pending {
+    background: linear-gradient(135deg, hsl(38.7, 92%, 50%) 0%, hsl(38.7, 92%, 45%) 100%);
+    color: white;
+  }
+  
+  .overview-stat-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .overview-stat-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  .overview-stat-card-primary .overview-stat-label,
+  .overview-stat-card-secondary .overview-stat-label,
+  .overview-stat-card-active .overview-stat-label,
+  .overview-stat-card-pending .overview-stat-label {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .overview-stat-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  
+  .overview-stat-card-primary .overview-stat-value,
+  .overview-stat-card-secondary .overview-stat-value,
+  .overview-stat-card-active .overview-stat-value,
+  .overview-stat-card-pending .overview-stat-value {
+    color: white;
+  }
+  
+  .overview-stat-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    opacity: 0.8;
+  }
+  
+  .overview-stat-card-primary .overview-stat-icon,
+  .overview-stat-card-secondary .overview-stat-icon,
+  .overview-stat-card-active .overview-stat-icon,
+  .overview-stat-card-pending .overview-stat-icon {
+    color: white;
+  }
+  
+  .overview-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .overview-appointments-card,
+  .overview-quick-actions-card,
+  .overview-recent-patients-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .overview-card-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid hsl(214.3, 31.8%, 91.4%);
+    background-color: hsl(210, 40%, 98%);
+  }
+  
+  .overview-card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin: 0;
+  }
+  
+  .overview-card-content {
+    padding: 1.5rem;
+  }
+  
+  .overview-appointments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .overview-appointment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: hsl(210, 40%, 98%);
+    border-radius: 0.5rem;
+    border: 1px solid hsl(214.3, 31.8%, 91.4%);
+  }
+  
+  .overview-appointment-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .overview-appointment-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background-color: hsl(197, 89%, 48%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .overview-appointment-patient {
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin-bottom: 0.25rem;
+  }
+  
+  .overview-appointment-type {
+    color: hsl(215.4, 16.3%, 46.9%);
+    font-size: 0.875rem;
+  }
+  
+  .overview-appointment-right {
+    text-align: right;
+  }
+  
+  .overview-appointment-time {
+    font-weight: 600;
+    color: hsl(197, 89%, 48%);
+    margin-bottom: 0.25rem;
+  }
+  
+  .overview-appointment-duration {
+    color: hsl(215.4, 16.3%, 46.9%);
+    font-size: 0.875rem;
+  }
+  
+  .overview-quick-actions-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .overview-action-btn {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    border: none;
+    width: 100%;
+  }
+  
+  .overview-action-btn-outline {
+    background-color: transparent;
+    border: 1px solid hsl(214.3, 31.8%, 91.4%);
+    color: hsl(215, 25%, 27%);
+  }
+  
+  .overview-action-btn-outline:hover {
+    background-color: hsl(210, 40%, 98%);
+  }
+  
+  .overview-action-btn-secondary {
+    background-color: hsl(173, 58%, 39%);
+    color: white;
+  }
+  
+  .overview-action-btn-secondary:hover {
+    background-color: hsl(173, 58%, 34%);
+  }
+  
+  .overview-action-btn-accent {
+    background-color: hsl(38.7, 92%, 50%);
+    color: white;
+  }
+  
+  .overview-action-btn-accent:hover {
+    background-color: hsl(38.7, 92%, 45%);
+  }
+  
+  .overview-recent-patients-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .overview-patient-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: hsl(210, 40%, 98%);
+    border-radius: 0.5rem;
+    border: 1px solid hsl(214.3, 31.8%, 91.4%);
+  }
+  
+  .overview-patient-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    background-color: hsl(197, 89%, 48%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .overview-patient-info {
+    flex: 1;
+  }
+  
+  .overview-patient-name {
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin-bottom: 0.25rem;
+  }
+  
+  .overview-patient-age {
+    color: hsl(215.4, 16.3%, 46.9%);
+    font-size: 0.875rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    .overview-content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .overview-stats-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .overview-appointment-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .overview-appointment-right {
+      text-align: left;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  
+  /* Patient List Styles */
+  .patient-list-container {
+    padding: 1.5rem;
+  }
+  
+  .patient-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .patient-list-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(215, 25%, 27%);
+    margin: 0;
+  }
+  
+  .patient-list-subtitle {
+    color: hsl(215.4, 16.3%, 46.9%);
+    margin: 0.5rem 0 0 0;
+  }
+  
+  .patient-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .patient-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+  
+  .patient-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .patient-card-content {
+    padding: 1.5rem;
+  }
+  
+  .patient-card-header {
+    margin-bottom: 1rem;
+  }
+  
+  .patient-card-main-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .patient-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+  }
+  
+  .patient-avatar-fallback {
+    background-color: hsl(197, 89%, 48%);
+    color: white;
+  }
+  
+  .patient-details {
+    flex: 1;
+  }
+  
+  .patient-name-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    flex-wrap: wrap;
+  }
+  
+  .patient-name {
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+    margin: 0;
+  }
+  
+  .patient-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .patient-status-stable {
+    background-color: hsl(142.1, 76.2%, 90%);
+    color: hsl(142.1, 76.2%, 36.3%);
+  }
+  
+  .patient-demographics {
+    color: hsl(215.4, 16.3%, 46.9%);
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .patient-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .patient-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .patient-info-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: hsl(215.4, 16.3%, 46.9%);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+  
+  .patient-info-text {
+    font-size: 0.875rem;
+    color: hsl(215, 25%, 27%);
+    margin: 0;
+  }
+  
+  .patient-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .patient-action-view,
+  .patient-action-schedule,
+  .patient-action-contact {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    transition: all 0.15s ease;
+    border: 1px solid hsl(214.3, 31.8%, 91.4%);
+    background-color: white;
+    color: hsl(215, 25%, 27%);
+  }
+  
+  .patient-action-view:hover,
+  .patient-action-schedule:hover,
+  .patient-action-contact:hover {
+    background-color: hsl(210, 40%, 98%);
+  }
+  
+  .patient-action-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  
+  /* Patient Records Styles */
+  .patient-records-container {
+    padding: 1.5rem;
+  }
+  
+  .patient-records-main-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .patient-records-main-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(215, 25%, 27%);
+    margin: 0;
+  }
+  
+  .patient-records-main-subtitle {
+    color: hsl(215.4, 16.3%, 46.9%);
+    margin: 0.5rem 0 0 0;
+  }
+  
+  .patient-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .patient-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: hsl(210, 40%, 98%);
+    border-radius: 0.5rem;
+    border: 1px solid hsl(214.3, 31.8%, 91.4%);
+  }
+  
+  .patient-info-label {
+    font-weight: 600;
+    color: hsl(215, 25%, 27%);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .patient-list-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .patient-list-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .patient-actions {
+      flex-direction: column;
+    }
+    
+    .patient-info-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }

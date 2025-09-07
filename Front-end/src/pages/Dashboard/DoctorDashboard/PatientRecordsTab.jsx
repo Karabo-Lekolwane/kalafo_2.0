@@ -5,6 +5,7 @@ import { Input } from "../../../components/ui/input";
 import { Badge } from "../../../components/ui/badge";
 import { Avatar, AvatarFallback } from "../../../components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
+import './index.css';
 import { 
   Search, 
   Filter, 
@@ -114,13 +115,13 @@ const PatientRecordsTab = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'stable':
-        return 'bg-medical-success text-white';
+        return 'patient-status-stable';
       case 'monitoring':
-        return 'bg-status-pending text-white';
+        return 'patient-status-monitoring';
       case 'critical':
-        return 'bg-medical-error text-white';
+        return 'patient-status-critical';
       default:
-        return 'bg-gray-500 text-white';
+        return 'patient-status-default';
     }
   };
 
@@ -128,38 +129,38 @@ const PatientRecordsTab = () => {
     if (!selectedPatient) return null;
 
     return (
-      <div className="space-y-6">
+      <div className="patient-records-detail">
         {/* Patient Header */}
-        <Card className="shadow-card">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex items-start gap-4">
-                <Avatar className="h-16 w-16">
-                  <AvatarFallback className="bg-medical-primary text-white text-lg">
+        <Card className="patient-records-header-card">
+          <CardContent className="patient-records-header-content">
+            <div className="patient-records-header-container">
+              <div className="patient-records-header-info">
+                <Avatar className="patient-records-avatar">
+                  <AvatarFallback className="patient-records-avatar-fallback">
                     {selectedPatient.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground">{selectedPatient.name}</h2>
-                  <div className="flex items-center gap-4 mt-2">
-                    <span className="text-muted-foreground">{selectedPatient.age} years old • {selectedPatient.gender}</span>
-                    <Badge className={getStatusColor(selectedPatient.status)}>
+                  <h2 className="patient-records-name">{selectedPatient.name}</h2>
+                  <div className="patient-records-demographics">
+                    <span className="patient-records-age-gender">{selectedPatient.age} years old • {selectedPatient.gender}</span>
+                    <Badge className={`patient-records-status ${getStatusColor(selectedPatient.status)}`}>
                       {selectedPatient.status.charAt(0).toUpperCase() + selectedPatient.status.slice(1)}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                  <div className="patient-records-meta">
                     <span>MRN: {selectedPatient.mrn}</span>
                     <span>Blood Type: {selectedPatient.bloodType}</span>
                     <span>Last Visit: {new Date(selectedPatient.lastVisit).toLocaleDateString()}</span>
                   </div>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" className="border-medical-primary text-medical-primary hover:bg-medical-primary hover:text-white">
-                  <Download className="h-4 w-4 mr-2" />
+              <div className="patient-records-header-actions">
+                <Button variant="outline" className="patient-records-export-btn">
+                  <Download className="patient-records-export-icon" />
                   Export Records
                 </Button>
-                <Button onClick={() => setSelectedPatient(null)} variant="outline">
+                <Button onClick={() => setSelectedPatient(null)} variant="outline" className="patient-records-back-btn">
                   Back to List
                 </Button>
               </div>
@@ -169,7 +170,7 @@ const PatientRecordsTab = () => {
 
         {/* Patient Details Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="patient-records-tabs-list">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="consultations">Consultations</TabsTrigger>
             <TabsTrigger value="vitals">Vitals & Trends</TabsTrigger>
@@ -177,89 +178,89 @@ const PatientRecordsTab = () => {
             <TabsTrigger value="stethoscope">Stethoscope Data</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <TabsContent value="overview" className="patient-records-tab-content">
+            <div className="patient-records-overview-grid">
               {/* Basic Information */}
-              <Card className="shadow-card">
+              <Card className="patient-records-info-card">
                 <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <User className="h-4 w-4 text-medical-primary" />
+                  <CardTitle className="patient-records-card-title">
+                    <User className="patient-records-card-icon" />
                     Basic Information
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Phone:</span>
-                    <span className="text-sm">{selectedPatient.phone}</span>
+                <CardContent className="patient-records-card-content">
+                  <div className="patient-records-info-item">
+                    <span className="patient-records-info-label">Phone:</span>
+                    <span className="patient-records-info-value">{selectedPatient.phone}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Email:</span>
-                    <span className="text-sm">{selectedPatient.email}</span>
+                  <div className="patient-records-info-item">
+                    <span className="patient-records-info-label">Email:</span>
+                    <span className="patient-records-info-value">{selectedPatient.email}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Blood Type:</span>
-                    <span className="text-sm">{selectedPatient.bloodType}</span>
+                  <div className="patient-records-info-item">
+                    <span className="patient-records-info-label">Blood Type:</span>
+                    <span className="patient-records-info-value">{selectedPatient.bloodType}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">MRN:</span>
-                    <span className="text-sm">{selectedPatient.mrn}</span>
+                  <div className="patient-records-info-item">
+                    <span className="patient-records-info-label">MRN:</span>
+                    <span className="patient-records-info-value">{selectedPatient.mrn}</span>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Current Condition */}
-              <Card className="shadow-card">
+              <Card className="patient-records-info-card">
                 <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <ClipboardList className="h-4 w-4 text-medical-primary" />
+                  <CardTitle className="patient-records-card-title">
+                    <ClipboardList className="patient-records-card-icon" />
                     Current Condition
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="font-semibold text-foreground">{selectedPatient.condition}</p>
-                  <p className="text-sm text-muted-foreground mt-2">Status: {selectedPatient.status}</p>
+                  <p className="patient-records-condition">{selectedPatient.condition}</p>
+                  <p className="patient-records-condition-status">Status: {selectedPatient.status}</p>
                 </CardContent>
               </Card>
 
               {/* Allergies */}
-              <Card className="shadow-card">
+              <Card className="patient-records-info-card">
                 <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-medical-warning" />
+                  <CardTitle className="patient-records-card-title">
+                    <AlertTriangle className="patient-records-card-icon patient-records-allergy-icon" />
                     Allergies
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {selectedPatient.allergies.length > 0 ? (
-                    <div className="space-y-1">
+                    <div className="patient-records-allergies">
                       {selectedPatient.allergies.map((allergy, index) => (
-                        <Badge key={index} variant="outline" className="border-medical-warning text-medical-warning">
+                        <Badge key={index} variant="outline" className="patient-records-allergy-badge">
                           {allergy}
                         </Badge>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-muted-foreground">No known allergies</p>
+                    <p className="patient-records-no-allergies">No known allergies</p>
                   )}
                 </CardContent>
               </Card>
             </div>
 
             {/* Recent Consultations */}
-            <Card className="shadow-card">
+            <Card className="patient-records-consultations-card">
               <CardHeader>
                 <CardTitle>Recent Consultations</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className="patient-records-consultations-list">
                   {selectedPatient.consultations.slice(0, 3).map((consultation) => (
-                    <div key={consultation.id} className="flex items-center justify-between p-3 bg-medical-card rounded-lg border border-border">
+                    <div key={consultation.id} className="patient-records-consultation-item">
                       <div>
-                        <h4 className="font-semibold text-foreground">{consultation.type}</h4>
-                        <p className="text-sm text-muted-foreground">{new Date(consultation.date).toLocaleDateString()} • {consultation.doctor}</p>
-                        <p className="text-sm text-muted-foreground">{consultation.diagnosis}</p>
+                        <h4 className="patient-records-consultation-type">{consultation.type}</h4>
+                        <p className="patient-records-consultation-meta">{new Date(consultation.date).toLocaleDateString()} • {consultation.doctor}</p>
+                        <p className="patient-records-consultation-diagnosis">{consultation.diagnosis}</p>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      <ChevronRight className="patient-records-consultation-arrow" />
                     </div>
                   ))}
                 </div>
@@ -267,44 +268,44 @@ const PatientRecordsTab = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="consultations" className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">Consultation History</h3>
-              <Button className="bg-medical-primary hover:bg-medical-primary/90">
-                <Plus className="h-4 w-4 mr-2" />
+          <TabsContent value="consultations" className="patient-records-tab-content">
+            <div className="patient-records-consultations-header">
+              <h3 className="patient-records-consultations-title">Consultation History</h3>
+              <Button className="patient-records-add-btn">
+                <Plus className="patient-records-add-icon" />
                 New Consultation
               </Button>
             </div>
             
-            <div className="space-y-4">
+            <div className="patient-records-consultations-detail">
               {selectedPatient.consultations.map((consultation) => (
-                <Card key={consultation.id} className="shadow-card">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
+                <Card key={consultation.id} className="patient-records-consultation-card">
+                  <CardContent className="patient-records-consultation-content">
+                    <div className="patient-records-consultation-header">
                       <div>
-                        <h4 className="font-semibold text-foreground text-lg">{consultation.type}</h4>
-                        <p className="text-muted-foreground">{new Date(consultation.date).toLocaleDateString()} • {consultation.doctor}</p>
+                        <h4 className="patient-records-consultation-title">{consultation.type}</h4>
+                        <p className="patient-records-consultation-subtitle">{new Date(consultation.date).toLocaleDateString()} • {consultation.doctor}</p>
                       </div>
-                      <Button variant="outline" size="sm">
-                        <Eye className="h-4 w-4 mr-2" />
+                      <Button variant="outline" size="sm" className="patient-records-view-btn">
+                        <Eye className="patient-records-view-icon" />
                         View Details
                       </Button>
                     </div>
                     
-                    <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="patient-records-consultation-grid">
                       <div>
-                        <h5 className="font-medium text-foreground mb-2">Diagnosis</h5>
-                        <p className="text-sm text-muted-foreground">{consultation.diagnosis}</p>
+                        <h5 className="patient-records-consultation-subheading">Diagnosis</h5>
+                        <p className="patient-records-consultation-text">{consultation.diagnosis}</p>
                       </div>
                       <div>
-                        <h5 className="font-medium text-foreground mb-2">Vitals</h5>
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div className="flex items-center gap-1">
-                            <Heart className="h-3 w-3 text-medical-error" />
+                        <h5 className="patient-records-consultation-subheading">Vitals</h5>
+                        <div className="patient-records-vitals-grid">
+                          <div className="patient-records-vital-item">
+                            <Heart className="patient-records-vital-icon patient-records-vital-heart" />
                             BP: {consultation.vitals.bp}
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Activity className="h-3 w-3 text-medical-primary" />
+                          <div className="patient-records-vital-item">
+                            <Activity className="patient-records-vital-icon patient-records-vital-activity" />
                             HR: {consultation.vitals.hr} bpm
                           </div>
                         </div>
@@ -312,8 +313,8 @@ const PatientRecordsTab = () => {
                     </div>
                     
                     <div>
-                      <h5 className="font-medium text-foreground mb-2">Notes</h5>
-                      <p className="text-sm text-muted-foreground">{consultation.notes}</p>
+                      <h5 className="patient-records-consultation-subheading">Notes</h5>
+                      <p className="patient-records-consultation-text">{consultation.notes}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -321,40 +322,40 @@ const PatientRecordsTab = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="vitals" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <Card className="shadow-card">
+          <TabsContent value="vitals" className="patient-records-tab-content">
+            <div className="patient-records-vitals-grid">
+              <Card className="patient-records-vitals-card">
                 <CardHeader>
-                  <CardTitle className="text-sm">Blood Pressure Trend</CardTitle>
+                  <CardTitle className="patient-records-vitals-title">Blood Pressure Trend</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-48">
+                  <div className="patient-records-chart-container">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={selectedPatient.vitalHistory}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                         <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                         <YAxis domain={[110, 140]} tick={{ fontSize: 12 }} />
                         <Tooltip />
-                        <Line type="monotone" dataKey="bp" stroke="hsl(var(--medical-primary))" strokeWidth={2} />
+                        <Line type="monotone" dataKey="bp" stroke="hsl(197, 89%, 48%)" strokeWidth={2} />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="shadow-card">
+              <Card className="patient-records-vitals-card">
                 <CardHeader>
-                  <CardTitle className="text-sm">Heart Rate Trend</CardTitle>
+                  <CardTitle className="patient-records-vitals-title">Heart Rate Trend</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-48">
+                  <div className="patient-records-chart-container">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={selectedPatient.vitalHistory}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                         <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                         <YAxis domain={[60, 80]} tick={{ fontSize: 12 }} />
                         <Tooltip />
-                        <Line type="monotone" dataKey="hr" stroke="hsl(var(--medical-error))" strokeWidth={2} />
+                        <Line type="monotone" dataKey="hr" stroke="hsl(0, 84%, 60%)" strokeWidth={2} />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -363,61 +364,61 @@ const PatientRecordsTab = () => {
             </div>
 
             {/* Latest Vitals */}
-            <Card className="shadow-card">
+            <Card className="patient-records-latest-vitals-card">
               <CardHeader>
                 <CardTitle>Latest Vital Signs</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-4 bg-medical-card rounded-lg">
-                    <Heart className="h-8 w-8 text-medical-error mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">Heart Rate</p>
-                    <p className="text-xl font-bold text-foreground">72 bpm</p>
+                <div className="patient-records-vitals-display">
+                  <div className="patient-records-vital-box">
+                    <Heart className="patient-records-vital-display-icon patient-records-vital-heart" />
+                    <p className="patient-records-vital-label">Heart Rate</p>
+                    <p className="patient-records-vital-value">72 bpm</p>
                   </div>
-                  <div className="text-center p-4 bg-medical-card rounded-lg">
-                    <Activity className="h-8 w-8 text-medical-primary mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">Blood Pressure</p>
-                    <p className="text-xl font-bold text-foreground">125/80</p>
+                  <div className="patient-records-vital-box">
+                    <Activity className="patient-records-vital-display-icon patient-records-vital-activity" />
+                    <p className="patient-records-vital-label">Blood Pressure</p>
+                    <p className="patient-records-vital-value">125/80</p>
                   </div>
-                  <div className="text-center p-4 bg-medical-card rounded-lg">
-                    <TrendingUp className="h-8 w-8 text-status-pending mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">Temperature</p>
-                    <p className="text-xl font-bold text-foreground">98.6°F</p>
+                  <div className="patient-records-vital-box">
+                    <TrendingUp className="patient-records-vital-display-icon patient-records-vital-temp" />
+                    <p className="patient-records-vital-label">Temperature</p>
+                    <p className="patient-records-vital-value">98.6°F</p>
                   </div>
-                  <div className="text-center p-4 bg-medical-card rounded-lg">
-                    <Activity className="h-8 w-8 text-medical-accent mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">SpO2</p>
-                    <p className="text-xl font-bold text-foreground">98%</p>
+                  <div className="patient-records-vital-box">
+                    <Activity className="patient-records-vital-display-icon patient-records-vital-spo2" />
+                    <p className="patient-records-vital-label">SpO2</p>
+                    <p className="patient-records-vital-value">98%</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="medications" className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">Current Medications</h3>
-              <Button className="bg-medical-primary hover:bg-medical-primary/90">
-                <Plus className="h-4 w-4 mr-2" />
+          <TabsContent value="medications" className="patient-records-tab-content">
+            <div className="patient-records-medications-header">
+              <h3 className="patient-records-medications-title">Current Medications</h3>
+              <Button className="patient-records-add-btn">
+                <Plus className="patient-records-add-icon" />
                 Add Medication
               </Button>
             </div>
 
-            <div className="grid gap-3">
+            <div className="patient-records-medications-list">
               {selectedPatient.medications.map((medication, index) => (
-                <Card key={index} className="shadow-card">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-medical-accent rounded-full">
-                          <Pill className="h-4 w-4 text-white" />
+                <Card key={index} className="patient-records-medication-card">
+                  <CardContent className="patient-records-medication-content">
+                    <div className="patient-records-medication-container">
+                      <div className="patient-records-medication-info">
+                        <div className="patient-records-medication-icon-container">
+                          <Pill className="patient-records-medication-icon" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-foreground">{medication}</h4>
-                          <p className="text-sm text-muted-foreground">Daily • With food</p>
+                          <h4 className="patient-records-medication-name">{medication}</h4>
+                          <p className="patient-records-medication-details">Daily • With food</p>
                         </div>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="patient-records-medication-edit-btn">
                         Edit
                       </Button>
                     </div>
@@ -427,78 +428,78 @@ const PatientRecordsTab = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="stethoscope" className="space-y-4">
-            <Card className="shadow-card">
+          <TabsContent value="stethoscope" className="patient-records-tab-content">
+            <Card className="patient-records-stethoscope-card">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Stethoscope className="h-5 w-5 text-medical-primary" />
+                <CardTitle className="patient-records-stethoscope-title">
+                  <Stethoscope className="patient-records-stethoscope-icon" />
                   Kalafo Digital Stethoscope Data
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-4">
+                <div className="patient-records-stethoscope-grid">
+                  <div className="patient-records-stethoscope-analysis">
                     <div>
-                      <h4 className="font-semibold text-foreground mb-2">Heart Sound Analysis</h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center p-2 bg-medical-card rounded">
-                          <span className="text-sm">S1 Clarity</span>
-                          <Badge className="bg-medical-success text-white">Normal</Badge>
+                      <h4 className="patient-records-stethoscope-subtitle">Heart Sound Analysis</h4>
+                      <div className="patient-records-stethoscope-list">
+                        <div className="patient-records-stethoscope-item">
+                          <span className="patient-records-stethoscope-item-label">S1 Clarity</span>
+                          <Badge className="patient-records-stethoscope-badge-success">Normal</Badge>
                         </div>
-                        <div className="flex justify-between items-center p-2 bg-medical-card rounded">
-                          <span className="text-sm">S2 Clarity</span>
-                          <Badge className="bg-medical-success text-white">Normal</Badge>
+                        <div className="patient-records-stethoscope-item">
+                          <span className="patient-records-stethoscope-item-label">S2 Clarity</span>
+                          <Badge className="patient-records-stethoscope-badge-success">Normal</Badge>
                         </div>
-                        <div className="flex justify-between items-center p-2 bg-medical-card rounded">
-                          <span className="text-sm">Murmur Detection</span>
-                          <Badge variant="outline">None</Badge>
+                        <div className="patient-records-stethoscope-item">
+                          <span className="patient-records-stethoscope-item-label">Murmur Detection</span>
+                          <Badge variant="outline" className="patient-records-stethoscope-badge-outline">None</Badge>
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-foreground mb-2">Lung Sound Analysis</h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center p-2 bg-medical-card rounded">
-                          <span className="text-sm">Breath Sounds</span>
-                          <Badge className="bg-medical-success text-white">Clear</Badge>
+                      <h4 className="patient-records-stethoscope-subtitle">Lung Sound Analysis</h4>
+                      <div className="patient-records-stethoscope-list">
+                        <div className="patient-records-stethoscope-item">
+                          <span className="patient-records-stethoscope-item-label">Breath Sounds</span>
+                          <Badge className="patient-records-stethoscope-badge-success">Clear</Badge>
                         </div>
-                        <div className="flex justify-between items-center p-2 bg-medical-card rounded">
-                          <span className="text-sm">Adventitious Sounds</span>
-                          <Badge variant="outline">None</Badge>
+                        <div className="patient-records-stethoscope-item">
+                          <span className="patient-records-stethoscope-item-label">Adventitious Sounds</span>
+                          <Badge variant="outline" className="patient-records-stethoscope-badge-outline">None</Badge>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-2">Recent Recordings</h4>
-                    <div className="space-y-2">
-                      <div className="p-3 bg-medical-card rounded-lg border border-border">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium">Heart - Apex</span>
-                          <span className="text-xs text-muted-foreground">Jan 15, 2024</span>
+                  <div className="patient-records-stethoscope-recordings">
+                    <h4 className="patient-records-stethoscope-subtitle">Recent Recordings</h4>
+                    <div className="patient-records-stethoscope-recordings-list">
+                      <div className="patient-records-stethoscope-recording">
+                        <div className="patient-records-stethoscope-recording-header">
+                          <span className="patient-records-stethoscope-recording-name">Heart - Apex</span>
+                          <span className="patient-records-stethoscope-recording-date">Jan 15, 2024</span>
                         </div>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm" className="flex-1">
+                        <div className="patient-records-stethoscope-recording-actions">
+                          <Button variant="outline" size="sm" className="patient-records-stethoscope-action-btn">
                             Play
                           </Button>
-                          <Button variant="outline" size="sm" className="flex-1">
+                          <Button variant="outline" size="sm" className="patient-records-stethoscope-action-btn">
                             Analyze
                           </Button>
                         </div>
                       </div>
                       
-                      <div className="p-3 bg-medical-card rounded-lg border border-border">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium">Lungs - Right Upper</span>
-                          <span className="text-xs text-muted-foreground">Jan 15, 2024</span>
+                      <div className="patient-records-stethoscope-recording">
+                        <div className="patient-records-stethoscope-recording-header">
+                          <span className="patient-records-stethoscope-recording-name">Lungs - Right Upper</span>
+                          <span className="patient-records-stethoscope-recording-date">Jan 15, 2024</span>
                         </div>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm" className="flex-1">
+                        <div className="patient-records-stethoscope-recording-actions">
+                          <Button variant="outline" size="sm" className="patient-records-stethoscope-action-btn">
                             Play
                           </Button>
-                          <Button variant="outline" size="sm" className="flex-1">
+                          <Button variant="outline" size="sm" className="patient-records-stethoscope-action-btn">
                             Analyze
                           </Button>
                         </div>
@@ -515,73 +516,73 @@ const PatientRecordsTab = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="patient-records-container">
       {selectedPatient ? (
         renderPatientDetail()
       ) : (
         <>
           {/* Header */}
-          <div className="flex items-center justify-between">
+          <div className="patient-records-main-header">
             <div>
-              <h2 className="text-2xl font-bold text-foreground">Patient Records</h2>
-              <p className="text-muted-foreground">Access and manage detailed patient medical records</p>
+              <h2 className="patient-records-main-title">Patient Records</h2>
+              <p className="patient-records-main-subtitle">Access and manage detailed patient medical records</p>
             </div>
-            <Button className="bg-medical-primary hover:bg-medical-primary/90">
-              <Plus className="h-4 w-4 mr-2" />
+            <Button className="patient-records-main-add-btn">
+              <Plus className="patient-records-main-add-icon" />
               Add New Record
             </Button>
           </div>
 
           {/* Search */}
-          <Card className="shadow-card">
-            <CardContent className="p-6">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Card className="patient-records-search-card">
+            <CardContent className="patient-records-search-content">
+              <div className="patient-records-search-container">
+                <Search className="patient-records-search-icon" />
                 <Input
                   placeholder="Search by patient name, MRN, or condition..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="patient-records-search-input"
                 />
               </div>
             </CardContent>
           </Card>
 
           {/* Patient List */}
-          <div className="grid gap-4">
+          <div className="patient-records-list">
             {filteredPatients.map((patient) => (
-              <Card key={patient.id} className="hover:shadow-elevated transition-shadow duration-200 cursor-pointer shadow-card" onClick={() => setSelectedPatient(patient)}>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <Avatar className="h-12 w-12">
-                        <AvatarFallback className="bg-medical-primary text-white">
+              <Card key={patient.id} className="patient-records-list-card" onClick={() => setSelectedPatient(patient)}>
+                <CardContent className="patient-records-list-content">
+                  <div className="patient-records-list-item">
+                    <div className="patient-records-list-info">
+                      <Avatar className="patient-records-list-avatar">
+                        <AvatarFallback className="patient-records-list-avatar-fallback">
                           {patient.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="font-semibold text-foreground">{patient.name}</h3>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <h3 className="patient-records-list-name">{patient.name}</h3>
+                        <div className="patient-records-list-meta">
                           <span>MRN: {patient.mrn}</span>
                           <span>{patient.age} years old</span>
                           <span>{patient.condition}</span>
                         </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge className={getStatusColor(patient.status)}>
+                        <div className="patient-records-list-status">
+                          <Badge className={`patient-records-list-badge ${getStatusColor(patient.status)}`}>
                             {patient.status.charAt(0).toUpperCase() + patient.status.slice(1)}
                           </Badge>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="patient-records-list-visit">
                             Last visit: {new Date(patient.lastVisit).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Consultations</p>
-                        <p className="font-semibold text-foreground">{patient.consultations.length}</p>
+                    <div className="patient-records-list-actions">
+                      <div className="patient-records-list-consultations">
+                        <p className="patient-records-list-consultations-label">Consultations</p>
+                        <p className="patient-records-list-consultations-count">{patient.consultations.length}</p>
                       </div>
-                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                      <ChevronRight className="patient-records-list-arrow" />
                     </div>
                   </div>
                 </CardContent>
@@ -590,11 +591,11 @@ const PatientRecordsTab = () => {
           </div>
 
           {filteredPatients.length === 0 && (
-            <Card className="shadow-card">
-              <CardContent className="p-12 text-center">
-                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">No records found</h3>
-                <p className="text-muted-foreground">Try adjusting your search criteria.</p>
+            <Card className="patient-records-empty">
+              <CardContent className="patient-records-empty-content">
+                <FileText className="patient-records-empty-icon" />
+                <h3 className="patient-records-empty-title">No records found</h3>
+                <p className="patient-records-empty-text">Try adjusting your search criteria.</p>
               </CardContent>
             </Card>
           )}

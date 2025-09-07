@@ -208,20 +208,20 @@ const VideoConsultationTab = () => {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="video-consultation-container">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground">Video Consultation</h2>
-          <p className="text-muted-foreground">Conduct virtual consultations with patients</p>
+      <div className="video-consultation-header">
+        <div className="video-consultation-header-info">
+          <h2 className="video-consultation-title">Video Consultation</h2>
+          <p className="video-consultation-subtitle">Conduct virtual consultations with patients</p>
         </div>
         {isCallActive && selectedPatient && (
-          <div className="flex items-center gap-4">
-            <Badge className="bg-medical-success text-white">
-              <div className="w-2 h-2 bg-white rounded-full animate-pulse mr-2" />
+          <div className="video-consultation-status">
+            <Badge className="video-consultation-live-badge">
+              <div className="video-consultation-live-indicator" />
               Live with {selectedPatient.name}
             </Badge>
-            <span className="text-sm text-muted-foreground">
+            <span className="video-consultation-duration">
               Duration: {formatDuration(sessionDuration)}
             </span>
           </div>
@@ -230,48 +230,48 @@ const VideoConsultationTab = () => {
 
       {!isCallActive ? (
         // Waiting Room - Patient Selection
-        <div className="space-y-6">
-          <Card className="shadow-card">
+        <div className="video-consultation-waiting-room">
+          <Card className="video-consultation-card">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-medical-primary" />
+              <CardTitle className="video-consultation-card-title">
+                <Users className="video-consultation-card-icon" />
                 Scheduled Consultations
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4">
+              <div className="video-consultation-patient-list">
                 {availablePatients.map((patient) => (
                   <div 
                     key={patient.id}
-                    className="flex items-center justify-between p-4 bg-medical-card rounded-lg border border-border hover:bg-medical-card-hover transition-colors"
+                    className="video-consultation-patient-item"
                   >
-                    <div className="flex items-center gap-4">
-                      <Avatar className="h-12 w-12">
-                        <AvatarFallback className="bg-medical-primary text-white">
+                    <div className="video-consultation-patient-info">
+                      <Avatar className="video-consultation-patient-avatar">
+                        <AvatarFallback className="video-consultation-patient-avatar-fallback">
                           {patient.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
                       
-                      <div>
-                        <h3 className="font-semibold text-foreground">{patient.name}</h3>
-                        <p className="text-sm text-muted-foreground">Age: {patient.age} • {patient.condition}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Clock className="h-3 w-3 text-medical-primary" />
-                          <span className="text-xs text-medical-primary">Scheduled: {patient.appointmentTime}</span>
+                      <div className="video-consultation-patient-details">
+                        <h3 className="video-consultation-patient-name">{patient.name}</h3>
+                        <p className="video-consultation-patient-meta">Age: {patient.age} • {patient.condition}</p>
+                        <div className="video-consultation-patient-time">
+                          <Clock className="video-consultation-time-icon" />
+                          <span className="video-consultation-time-text">Scheduled: {patient.appointmentTime}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <p className="text-xs text-muted-foreground mb-1">Last Vitals:</p>
-                        <div className="text-xs space-y-1">
-                          <div className="flex items-center gap-1">
-                            <Heart className="h-3 w-3 text-medical-error" />
+                    <div className="video-consultation-patient-actions">
+                      <div className="video-consultation-patient-vitals">
+                        <p className="video-consultation-vitals-label">Last Vitals:</p>
+                        <div className="video-consultation-vitals-details">
+                          <div className="video-consultation-vital-item">
+                            <Heart className="video-consultation-vital-icon" />
                             {patient.lastVitals.heartRate} bpm
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Activity className="h-3 w-3 text-medical-primary" />
+                          <div className="video-consultation-vital-item">
+                            <Activity className="video-consultation-vital-icon" />
                             {patient.lastVitals.bloodPressure}
                           </div>
                         </div>
@@ -279,9 +279,9 @@ const VideoConsultationTab = () => {
                       
                       <Button 
                         onClick={() => handleStartCall(patient)}
-                        className="bg-medical-success hover:bg-medical-success/90"
+                        className="video-consultation-start-btn"
                       >
-                        <Video className="h-4 w-4 mr-2" />
+                        <Video className="video-consultation-btn-icon" />
                         Start Call
                       </Button>
                     </div>
@@ -292,15 +292,15 @@ const VideoConsultationTab = () => {
           </Card>
 
           {/* Quick Start */}
-          <Card className="shadow-card">
+          <Card className="video-consultation-card">
             <CardHeader>
-              <CardTitle>Quick Start Consultation</CardTitle>
+              <CardTitle className="video-consultation-card-title">Quick Start Consultation</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground mb-4">Start an unscheduled consultation or test your video setup</p>
+              <p className="video-consultation-quickstart-text">Start an unscheduled consultation or test your video setup</p>
               <Button 
                 variant="outline" 
-                className="border-medical-primary text-medical-primary hover:bg-medical-primary hover:text-white"
+                className="video-consultation-test-btn"
                 onClick={() => handleStartCall({ 
                   id: 'test', 
                   name: 'Test Patient', 
@@ -308,7 +308,7 @@ const VideoConsultationTab = () => {
                   age: 'N/A'
                 })}
               >
-                <Video className="h-4 w-4 mr-2" />
+                <Video className="video-consultation-btn-icon" />
                 Test Video Setup
               </Button>
             </CardContent>
@@ -316,63 +316,63 @@ const VideoConsultationTab = () => {
         </div>
       ) : (
         // Active Consultation Interface
-        <div className="grid gap-6 lg:grid-cols-3 h-[calc(100vh-250px)]">
+        <div className="video-consultation-active">
           {/* Video Call Area */}
-          <Card className="lg:col-span-2 relative overflow-hidden shadow-elevated">
-            <CardContent className="p-0 h-full">
-              <div className="relative h-full">
+          <Card className="video-consultation-main">
+            <CardContent className="video-consultation-main-content">
+              <div className="video-consultation-video-container">
                 {isVideoOn ? (
                   <video
                     ref={videoRef}
                     autoPlay
                     muted
-                    className="w-full h-full object-cover bg-black"
+                    className="video-consultation-video-feed"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-medical-primary to-medical-accent flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <VideoOff className="h-20 w-20 mx-auto mb-4 opacity-60" />
-                      <h3 className="text-xl font-semibold mb-2">Camera is off</h3>
-                      <p className="text-sm opacity-80">Click the camera button to turn on video</p>
+                  <div className="video-consultation-video-off">
+                    <div className="video-consultation-video-off-content">
+                      <VideoOff className="video-consultation-video-off-icon" />
+                      <h3 className="video-consultation-video-off-title">Camera is off</h3>
+                      <p className="video-consultation-video-off-text">Click the camera button to turn on video</p>
                     </div>
                   </div>
                 )}
                 
                 {/* Patient Info Overlay */}
                 {selectedPatient && (
-                  <div className="absolute top-4 left-4 bg-black/70 text-white p-3 rounded-lg">
-                    <h4 className="font-semibold">{selectedPatient.name}</h4>
-                    <p className="text-xs opacity-80">{selectedPatient.condition}</p>
+                  <div className="video-consultation-patient-overlay">
+                    <h4 className="video-consultation-patient-overlay-name">{selectedPatient.name}</h4>
+                    <p className="video-consultation-patient-overlay-condition">{selectedPatient.condition}</p>
                   </div>
                 )}
                 
                 {/* Video Controls */}
-                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3">
+                <div className="video-consultation-controls">
                   <Button
                     size="lg"
                     variant={isAudioOn ? "secondary" : "destructive"}
                     onClick={toggleAudio}
-                    className="rounded-full w-14 h-14"
+                    className="video-consultation-control-btn"
                   >
-                    {isAudioOn ? <Mic className="h-6 w-6" /> : <MicOff className="h-6 w-6" />}
+                    {isAudioOn ? <Mic className="video-consultation-control-icon" /> : <MicOff className="video-consultation-control-icon" />}
                   </Button>
                   
                   <Button
                     size="lg"
                     variant="destructive"
                     onClick={handleEndCall}
-                    className="rounded-full w-14 h-14 bg-medical-error hover:bg-medical-error/90"
+                    className="video-consultation-end-btn"
                   >
-                    <PhoneOff className="h-6 w-6" />
+                    <PhoneOff className="video-consultation-control-icon" />
                   </Button>
                   
                   <Button
                     size="lg"
                     variant={isVideoOn ? "secondary" : "destructive"}
                     onClick={toggleVideo}
-                    className="rounded-full w-14 h-14"
+                    className="video-consultation-control-btn"
                   >
-                    {isVideoOn ? <Video className="h-6 w-6" /> : <VideoOff className="h-6 w-6" />}
+                    {isVideoOn ? <Video className="video-consultation-control-icon" /> : <VideoOff className="video-consultation-control-icon" />}
                   </Button>
                 </div>
               </div>
@@ -380,77 +380,77 @@ const VideoConsultationTab = () => {
           </Card>
 
           {/* Consultation Data Panel */}
-          <div className="space-y-4 overflow-y-auto">
+          <div className="video-consultation-sidebar">
             {/* Patient Info */}
-            <Card className="shadow-card">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm flex items-center gap-2">
-                  <User className="h-4 w-4 text-medical-primary" />
+            <Card className="video-consultation-sidebar-card">
+              <CardHeader className="video-consultation-sidebar-card-header">
+                <CardTitle className="video-consultation-sidebar-card-title">
+                  <User className="video-consultation-sidebar-card-icon" />
                   Patient Information
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {selectedPatient && (
-                  <div className="space-y-2">
-                    <p className="font-medium">{selectedPatient.name}</p>
-                    <p className="text-sm text-muted-foreground">Age: {selectedPatient.age}</p>
-                    <p className="text-sm text-muted-foreground">{selectedPatient.condition}</p>
+                  <div className="video-consultation-patient-sidebar-info">
+                    <p className="video-consultation-patient-sidebar-name">{selectedPatient.name}</p>
+                    <p className="video-consultation-patient-sidebar-meta">Age: {selectedPatient.age}</p>
+                    <p className="video-consultation-patient-sidebar-meta">{selectedPatient.condition}</p>
                   </div>
                 )}
               </CardContent>
             </Card>
 
             {/* Live Vitals */}
-            <Card className="shadow-card">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm flex items-center gap-2">
-                  <MonitorSpeaker className="h-4 w-4 text-medical-primary" />
+            <Card className="video-consultation-sidebar-card">
+              <CardHeader className="video-consultation-sidebar-card-header">
+                <CardTitle className="video-consultation-sidebar-card-title">
+                  <MonitorSpeaker className="video-consultation-sidebar-card-icon" />
                   Live Vitals from Stethoscope
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="flex items-center gap-2">
-                    <Heart className="h-4 w-4 text-medical-error" />
+              <CardContent className="video-consultation-vitals-content">
+                <div className="video-consultation-vitals-grid">
+                  <div className="video-consultation-vital-display">
+                    <Heart className="video-consultation-vital-display-icon" />
                     <div>
-                      <p className="text-xs text-muted-foreground">Heart Rate</p>
-                      <p className="font-semibold">74 bpm</p>
+                      <p className="video-consultation-vital-label">Heart Rate</p>
+                      <p className="video-consultation-vital-value">74 bpm</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Activity className="h-4 w-4 text-medical-primary" />
+                  <div className="video-consultation-vital-display">
+                    <Activity className="video-consultation-vital-display-icon" />
                     <div>
-                      <p className="text-xs text-muted-foreground">Blood Pressure</p>
-                      <p className="font-semibold">120/80</p>
+                      <p className="video-consultation-vital-label">Blood Pressure</p>
+                      <p className="video-consultation-vital-value">120/80</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Thermometer className="h-4 w-4 text-status-pending" />
+                  <div className="video-consultation-vital-display">
+                    <Thermometer className="video-consultation-vital-display-icon" />
                     <div>
-                      <p className="text-xs text-muted-foreground">Temperature</p>
-                      <p className="font-semibold">98.6°F</p>
+                      <p className="video-consultation-vital-label">Temperature</p>
+                      <p className="video-consultation-vital-value">98.6°F</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Droplets className="h-4 w-4 text-medical-accent" />
+                  <div className="video-consultation-vital-display">
+                    <Droplets className="video-consultation-vital-display-icon" />
                     <div>
-                      <p className="text-xs text-muted-foreground">SpO2</p>
-                      <p className="font-semibold">98%</p>
+                      <p className="video-consultation-vital-label">SpO2</p>
+                      <p className="video-consultation-vital-value">98%</p>
                     </div>
                   </div>
                 </div>
                 
                 {/* Heart Rate Chart */}
-                <div className="mt-4">
-                  <p className="text-xs text-muted-foreground mb-2">Heart Rate Trend</p>
-                  <div className="h-24">
+                <div className="video-consultation-chart-container">
+                  <p className="video-consultation-chart-label">Heart Rate Trend</p>
+                  <div className="video-consultation-chart">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={heartRateData}>
                         <XAxis dataKey="time" tick={{ fontSize: 10 }} />
                         <YAxis domain={[60, 85]} tick={{ fontSize: 10 }} />
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                         <Tooltip />
-                        <Line type="monotone" dataKey="rate" stroke="hsl(var(--medical-primary))" strokeWidth={2} dot={{ r: 3 }} />
+                        <Line type="monotone" dataKey="rate" stroke="hsl(197, 89%, 48%)" strokeWidth={2} dot={{ r: 3 }} />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -459,46 +459,46 @@ const VideoConsultationTab = () => {
             </Card>
 
             {/* Manual Vitals Input */}
-            <Card className="shadow-card">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm">Manual Vitals Entry</CardTitle>
+            <Card className="video-consultation-sidebar-card">
+              <CardHeader className="video-consultation-sidebar-card-header">
+                <CardTitle className="video-consultation-sidebar-card-title">Manual Vitals Entry</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label className="text-xs">Blood Pressure</Label>
+              <CardContent className="video-consultation-vitals-input-content">
+                <div className="video-consultation-vitals-input-grid">
+                  <div className="video-consultation-vitals-input-group">
+                    <Label className="video-consultation-vitals-input-label">Blood Pressure</Label>
                     <Input
                       value={vitals.bloodPressure}
                       onChange={(e) => setVitals(prev => ({...prev, bloodPressure: e.target.value}))}
                       placeholder="120/80"
-                      className="text-xs h-8"
+                      className="video-consultation-vitals-input"
                     />
                   </div>
-                  <div>
-                    <Label className="text-xs">Heart Rate</Label>
+                  <div className="video-consultation-vitals-input-group">
+                    <Label className="video-consultation-vitals-input-label">Heart Rate</Label>
                     <Input
                       value={vitals.heartRate}
                       onChange={(e) => setVitals(prev => ({...prev, heartRate: e.target.value}))}
                       placeholder="72 bpm"
-                      className="text-xs h-8"
+                      className="video-consultation-vitals-input"
                     />
                   </div>
-                  <div>
-                    <Label className="text-xs">Temperature</Label>
+                  <div className="video-consultation-vitals-input-group">
+                    <Label className="video-consultation-vitals-input-label">Temperature</Label>
                     <Input
                       value={vitals.temperature}
                       onChange={(e) => setVitals(prev => ({...prev, temperature: e.target.value}))}
                       placeholder="98.6°F"
-                      className="text-xs h-8"
+                      className="video-consultation-vitals-input"
                     />
                   </div>
-                  <div>
-                    <Label className="text-xs">O2 Saturation</Label>
+                  <div className="video-consultation-vitals-input-group">
+                    <Label className="video-consultation-vitals-input-label">O2 Saturation</Label>
                     <Input
                       value={vitals.oxygenSaturation}
                       onChange={(e) => setVitals(prev => ({...prev, oxygenSaturation: e.target.value}))}
                       placeholder="98%"
-                      className="text-xs h-8"
+                      className="video-consultation-vitals-input"
                     />
                   </div>
                 </div>
@@ -506,46 +506,46 @@ const VideoConsultationTab = () => {
             </Card>
 
             {/* Notes */}
-            <Card className="shadow-card">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm">Consultation Notes</CardTitle>
+            <Card className="video-consultation-sidebar-card">
+              <CardHeader className="video-consultation-sidebar-card-header">
+                <CardTitle className="video-consultation-sidebar-card-title">Consultation Notes</CardTitle>
               </CardHeader>
               <CardContent>
                 <Textarea
                   value={consultationNotes}
                   onChange={(e) => setConsultationNotes(e.target.value)}
                   placeholder="Take notes during consultation..."
-                  className="min-h-[100px] text-xs"
+                  className="video-consultation-notes-textarea"
                 />
               </CardContent>
             </Card>
 
             {/* Diagnosis */}
-            <Card className="shadow-card">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm">Diagnosis</CardTitle>
+            <Card className="video-consultation-sidebar-card">
+              <CardHeader className="video-consultation-sidebar-card-header">
+                <CardTitle className="video-consultation-sidebar-card-title">Diagnosis</CardTitle>
               </CardHeader>
               <CardContent>
                 <Textarea
                   value={diagnosis}
                   onChange={(e) => setDiagnosis(e.target.value)}
                   placeholder="Enter diagnosis..."
-                  className="min-h-[60px] text-xs"
+                  className="video-consultation-diagnosis-textarea"
                 />
               </CardContent>
             </Card>
 
             {/* Prescription */}
-            <Card className="shadow-card">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm">Prescription</CardTitle>
+            <Card className="video-consultation-sidebar-card">
+              <CardHeader className="video-consultation-sidebar-card-header">
+                <CardTitle className="video-consultation-sidebar-card-title">Prescription</CardTitle>
               </CardHeader>
               <CardContent>
                 <Textarea
                   value={prescription}
                   onChange={(e) => setPrescription(e.target.value)}
                   placeholder="Enter prescription details..."
-                  className="min-h-[60px] text-xs"
+                  className="video-consultation-prescription-textarea"
                 />
               </CardContent>
             </Card>
@@ -553,10 +553,10 @@ const VideoConsultationTab = () => {
             {/* Save Button */}
             <Button 
               onClick={handleSaveConsultation}
-              className="w-full bg-medical-primary hover:bg-medical-primary/90"
+              className="video-consultation-save-btn"
               disabled={!consultationNotes.trim()}
             >
-              <Save className="h-4 w-4 mr-2" />
+              <Save className="video-consultation-save-icon" />
               Save Consultation Record
             </Button>
           </div>

@@ -160,58 +160,53 @@ const PatientListTab = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'stable':
-        return 'bg-medical-success text-white';
+        return 'patient-status-stable';
       case 'monitoring':
-        return 'bg-status-pending text-white';
+        return 'patient-status-monitoring';
       case 'critical':
-        return 'bg-medical-error text-white';
+        return 'patient-status-critical';
       case 'improving':
-        return 'bg-medical-primary text-white';
+        return 'patient-status-improving';
       default:
-        return 'bg-gray-500 text-white';
+        return 'patient-status-default';
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="patient-list-container">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="patient-list-header">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Patient Management</h2>
-          <p className="text-muted-foreground">Manage and view all patient information</p>
+          <h2 className="patient-list-title">Patient Management</h2>
+          <p className="patient-list-subtitle">Manage and view all patient information</p>
         </div>
-        <Button className="bg-medical-primary hover:bg-medical-primary/90">
-          <Plus className="h-4 w-4 mr-2" />
+        <Button className="patient-list-add-button">
+          <Plus className="patient-list-add-icon" />
           Add New Patient
         </Button>
       </div>
 
       {/* Search and Filters */}
-      <Card className="shadow-card">
-        <CardContent className="p-6">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <Card className="patient-list-search-card">
+        <CardContent className="patient-list-search-content">
+          <div className="patient-list-search-container">
+            <div className="patient-list-search-input-container">
+              <Search className="patient-list-search-icon" />
               <Input
                 placeholder="Search patients by name, condition, or email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="patient-list-search-input"
               />
             </div>
-            <div className="flex gap-2 overflow-x-auto">
+            <div className="patient-list-filter-container">
               {filterOptions.map((option) => (
                 <Button
                   key={option.value}
                   variant={selectedFilter === option.value ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedFilter(option.value)}
-                  className={cn(
-                    "whitespace-nowrap",
-                    selectedFilter === option.value 
-                      ? "bg-medical-primary hover:bg-medical-primary/90" 
-                      : "border-medical-primary text-medical-primary hover:bg-medical-primary hover:text-white"
-                  )}
+                  className={`patient-list-filter-button ${selectedFilter === option.value ? 'patient-list-filter-button-active' : ''}`}
                 >
                   {option.label} ({option.count})
                 </Button>
@@ -222,110 +217,110 @@ const PatientListTab = () => {
       </Card>
 
       {/* Patient List */}
-      <div className="grid gap-4">
+      <div className="patient-list-grid">
         {filteredPatients.map((patient) => (
-          <Card key={patient.id} className="hover:shadow-elevated transition-shadow duration-200 cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-4 flex-1">
-                  <Avatar className="h-16 w-16">
+          <Card key={patient.id} className="patient-card">
+            <CardContent className="patient-card-content">
+              <div className="patient-card-header">
+                <div className="patient-card-main-info">
+                  <Avatar className="patient-avatar">
                     <AvatarImage src={patient.avatar} />
-                    <AvatarFallback className="bg-medical-primary text-white text-lg">
+                    <AvatarFallback className="patient-avatar-fallback">
                       {patient.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                   
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-3">
+                  <div className="patient-details">
+                    <div className="patient-name-container">
                       <div>
-                        <h3 className="text-lg font-semibold text-foreground">{patient.name}</h3>
-                        <p className="text-muted-foreground">{patient.age} years old • {patient.gender}</p>
+                        <h3 className="patient-name">{patient.name}</h3>
+                        <p className="patient-demographics">{patient.age} years old • {patient.gender}</p>
                       </div>
-                      <Badge className={getStatusColor(patient.status)}>
+                      <Badge className={`patient-status ${getStatusColor(patient.status)}`}>
                         {patient.status.charAt(0).toUpperCase() + patient.status.slice(1)}
                       </Badge>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-foreground">Contact Information</h4>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Phone className="h-3 w-3" />
+                    <div className="patient-info-grid">
+                      <div className="patient-info-section">
+                        <h4 className="patient-info-title">Contact Information</h4>
+                        <div className="patient-info-list">
+                          <div className="patient-info-item">
+                            <Phone className="patient-info-icon" />
                             {patient.phone}
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Mail className="h-3 w-3" />
+                          <div className="patient-info-item">
+                            <Mail className="patient-info-icon" />
                             {patient.email}
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <MapPin className="h-3 w-3" />
+                          <div className="patient-info-item">
+                            <MapPin className="patient-info-icon" />
                             {patient.address}
                           </div>
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-foreground">Medical Information</h4>
-                        <div className="space-y-1">
-                          <p className="text-sm text-muted-foreground">
-                            <span className="font-medium">Condition:</span> {patient.condition}
+                      <div className="patient-info-section">
+                        <h4 className="patient-info-title">Medical Information</h4>
+                        <div className="patient-info-list">
+                          <p className="patient-info-text">
+                            <span className="patient-info-label">Condition:</span> {patient.condition}
                           </p>
-                          <p className="text-sm text-muted-foreground">
-                            <span className="font-medium">Blood Type:</span> {patient.bloodType}
+                          <p className="patient-info-text">
+                            <span className="patient-info-label">Blood Type:</span> {patient.bloodType}
                           </p>
-                          <p className="text-sm text-muted-foreground">
-                            <span className="font-medium">Allergies:</span> {patient.allergies.join(', ')}
+                          <p className="patient-info-text">
+                            <span className="patient-info-label">Allergies:</span> {patient.allergies.join(', ')}
                           </p>
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-foreground">Recent Vitals</h4>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Heart className="h-3 w-3 text-medical-error" />
+                      <div className="patient-info-section">
+                        <h4 className="patient-info-title">Recent Vitals</h4>
+                        <div className="patient-info-list">
+                          <div className="patient-info-item">
+                            <Heart className="patient-info-icon patient-vitals-heart" />
                             BP: {patient.vitals.bloodPressure}
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Activity className="h-3 w-3 text-medical-primary" />
+                          <div className="patient-info-item">
+                            <Activity className="patient-info-icon patient-vitals-activity" />
                             HR: {patient.vitals.heartRate} bpm
                           </div>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="patient-info-text">
                             Temp: {patient.vitals.temperature}
                           </p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="patient-info-text">
                             Weight: {patient.vitals.weight}
                           </p>
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-foreground">Appointments</h4>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Calendar className="h-3 w-3" />
+                      <div className="patient-info-section">
+                        <h4 className="patient-info-title">Appointments</h4>
+                        <div className="patient-info-list">
+                          <div className="patient-info-item">
+                            <Calendar className="patient-info-icon" />
                             Last: {new Date(patient.lastVisit).toLocaleDateString()}
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-medical-primary">
-                            <Calendar className="h-3 w-3" />
+                          <div className="patient-info-item patient-next-appointment">
+                            <Calendar className="patient-info-icon" />
                             Next: {new Date(patient.nextAppointment).toLocaleDateString()}
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex gap-2">
-                      <Button size="sm" className="bg-medical-primary hover:bg-medical-primary/90">
-                        <Eye className="h-4 w-4 mr-2" />
+                    <div className="patient-actions">
+                      <Button size="sm" className="patient-action-view">
+                        <Eye className="patient-action-icon" />
                         View Full Record
                       </Button>
-                      <Button size="sm" variant="outline" className="border-medical-secondary text-medical-secondary hover:bg-medical-secondary hover:text-white">
-                        <Calendar className="h-4 w-4 mr-2" />
+                      <Button size="sm" variant="outline" className="patient-action-schedule">
+                        <Calendar className="patient-action-icon" />
                         Schedule Appointment
                       </Button>
-                      <Button size="sm" variant="outline" className="border-medical-accent text-medical-accent hover:bg-medical-accent hover:text-white">
-                        <Phone className="h-4 w-4 mr-2" />
+                      <Button size="sm" variant="outline" className="patient-action-contact">
+                        <Phone className="patient-action-icon" />
                         Contact
                       </Button>
                     </div>
@@ -338,11 +333,11 @@ const PatientListTab = () => {
       </div>
 
       {filteredPatients.length === 0 && (
-        <Card className="shadow-card">
-          <CardContent className="p-12 text-center">
-            <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">No patients found</h3>
-            <p className="text-muted-foreground">Try adjusting your search criteria or add a new patient.</p>
+        <Card className="patient-list-empty">
+          <CardContent className="patient-list-empty-content">
+            <User className="patient-list-empty-icon" />
+            <h3 className="patient-list-empty-title">No patients found</h3>
+            <p className="patient-list-empty-text">Try adjusting your search criteria or add a new patient.</p>
           </CardContent>
         </Card>
       )}

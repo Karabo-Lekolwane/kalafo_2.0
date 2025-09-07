@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import VideoConsultation from './VideoConsultation';
 import { 
   Calendar, 
   Users, 
@@ -14,201 +15,21 @@ import {
   Settings,
   LogOut,
   Plus,
+  Filter,
   Eye,
   Phone,
   Mail,
   MapPin,
-  Stethoscope,
-  Mic,
-  MicOff,
-  VideoIcon,
-  VideoOff,
-  ScreenShare,
-  X
+  Stethoscope
 } from 'lucide-react';
-import './Patient.css';
+import './PatientDashboard.css';
 
-// VideoConsultation Component (defined inline)
-const VideoConsultation = ({ consultationId, patientId, doctorId, doctorName, onEndCall }) => {
-  const [isMuted, setIsMuted] = useState(false);
-  const [isVideoOff, setIsVideoOff] = useState(false);
-  const [callTime, setCallTime] = useState(0);
-  const [isConnected, setIsConnected] = useState(false);
-  
-  const localVideoRef = useRef(null);
-  const callTimerRef = useRef(null);
-
-  useEffect(() => {
-    // Initialize video call simulation
-    initializeCall();
-    
-    // Start call timer
-    callTimerRef.current = setInterval(() => {
-      setCallTime(prev => prev + 1);
-    }, 1000);
-    
-    // Cleanup on component unmount
-    return () => {
-      if (callTimerRef.current) {
-        clearInterval(callTimerRef.current);
-      }
-    };
-  }, [consultationId]);
-
-  const initializeCall = async () => {
-    try {
-      console.log(`Initializing call for consultation ${consultationId}`);
-      
-      // Get user media (camera and microphone)
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: true, 
-        audio: true 
-      });
-      
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
-      
-      // Simulate connection after a brief delay
-      setTimeout(() => {
-        setIsConnected(true);
-        console.log('Call connected successfully');
-      }, 1500);
-      
-    } catch (error) {
-      console.error('Error accessing media devices:', error);
-      // Fallback to simulated video for demo purposes
-      setTimeout(() => {
-        setIsConnected(true);
-        console.log('Using simulated video call');
-      }, 1500);
-    }
-  };
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-  };
-
-  const toggleVideo = () => {
-    setIsVideoOff(!isVideoOff);
-  };
-
-  const formatCallTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  return (
-    <div className="video-consultation-container">
-      {/* Header */}
-      <div className="video-consultation-header">
-        <div>
-          <h2>Video Consultation with {doctorName}</h2>
-          <p>Consultation ID: {consultationId} • {isConnected ? 'Connected' : 'Connecting...'} • {formatCallTime(callTime)}</p>
-        </div>
-        <button onClick={onEndCall} className="video-consultation-close">
-          <X size={24} />
-        </button>
-      </div>
-
-      {/* Video Content */}
-      <div className="video-consultation-content">
-        {/* Main Video Area */}
-        <div className="video-main">
-          <div className="video-feed">
-            {isConnected ? (
-              <div className="video-connected">
-                <div className="doctor-video">
-                  <div className="video-placeholder">
-                    <VideoIcon size={48} />
-                    <p>Dr. {doctorName}</p>
-                  </div>
-                </div>
-                <div className="patient-video-preview">
-                  <video 
-                    ref={localVideoRef} 
-                    autoPlay 
-                    playsInline 
-                    muted
-                    className={isVideoOff ? 'video-disabled' : ''}
-                  />
-                  {isVideoOff && (
-                    <div className="video-off-overlay">
-                      <VideoOff size={24} />
-                      <p>Video is off</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="video-connecting">
-                <div className="loading-spinner">Connecting...</div>
-                <p>Setting up your consultation with Dr. {doctorName}</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Controls */}
-        <div className="video-controls">
-          <button 
-            className={`control-button ${isMuted ? 'control-button-muted' : ''}`}
-            onClick={toggleMute}
-          >
-            {isMuted ? <MicOff size={20} /> : <Mic size={20} />}
-            <span>{isMuted ? 'Unmute' : 'Mute'}</span>
-          </button>
-          
-          <button 
-            className={`control-button ${isVideoOff ? 'control-button-video-off' : ''}`}
-            onClick={toggleVideo}
-          >
-            {isVideoOff ? <VideoOff size={20} /> : <VideoIcon size={20} />}
-            <span>{isVideoOff ? 'Start Video' : 'Stop Video'}</span>
-          </button>
-          
-          <button 
-            className="control-button control-button-end"
-            onClick={onEndCall}
-          >
-            <Phone size={20} style={{ transform: 'rotate(135deg)' }} />
-            <span>End Call</span>
-          </button>
-        </div>
-
-        {/* Consultation Info */}
-        <div className="consultation-info">
-          <h3>Consultation Notes</h3>
-          <div className="consultation-notes">
-            <p>Discuss your symptoms and concerns with the doctor.</p>
-            <p>Please describe:</p>
-            <ul>
-              <li>Your main symptoms</li>
-              <li>When they started</li>
-              <li>Any medications you're taking</li>
-              <li>Other health concerns</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Main PatientDashboard Component
 function PatientDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isInVideoTest, setIsInVideoTest] = useState(false);
-  const [videoTestSettings, setVideoTestSettings] = useState({
-    audio: true,
-    video: true,
-    screenShare: false
-  });
   
   // Video consultation state
   const [activeConsultation, setActiveConsultation] = useState(null);
@@ -395,10 +216,6 @@ function PatientDashboard() {
 
   const handleBookAppointment = () => {
     alert('Appointment booking feature will be implemented here');
-  };
-
-  const handleVideoTest = () => {
-    setIsInVideoTest(true);
   };
 
   if (loading) {
@@ -814,96 +631,6 @@ function PatientDashboard() {
     </div>
   );
 
-  const VideoTestModal = () => (
-    <div className="video-test-modal-overlay">
-      <div className="video-test-modal">
-        <div className="video-test-header">
-          <h3>Video Call Test</h3>
-          <button onClick={() => setIsInVideoTest(false)} className="video-test-close">
-            <X size={20} />
-          </button>
-        </div>
-        
-        <div className="video-test-content">
-          <div className="video-preview">
-            <div className="video-feed">
-              <div className="video-placeholder">
-                <VideoIcon size={48} />
-                <p>Video preview</p>
-              </div>
-            </div>
-            
-            <div className="video-controls-panel">
-              <button 
-                className={`control-btn ${videoTestSettings.audio ? 'active' : ''}`}
-                onClick={() => setVideoTestSettings({...videoTestSettings, audio: !videoTestSettings.audio})}
-              >
-                {videoTestSettings.audio ? <Mic size={20} /> : <MicOff size={20} />}
-                <span>{videoTestSettings.audio ? 'Mute' : 'Unmute'}</span>
-              </button>
-              
-              <button 
-                className={`control-btn ${videoTestSettings.video ? 'active' : ''}`}
-                onClick={() => setVideoTestSettings({...videoTestSettings, video: !videoTestSettings.video})}
-              >
-                {videoTestSettings.video ? <VideoIcon size={20} /> : <VideoOff size={20} />}
-                <span>{videoTestSettings.video ? 'Stop Video' : 'Start Video'}</span>
-              </button>
-              
-              <button 
-                className={`control-btn ${videoTestSettings.screenShare ? 'active' : ''}`}
-                onClick={() => setVideoTestSettings({...videoTestSettings, screenShare: !videoTestSettings.screenShare})}
-              >
-                <ScreenShare size={20} />
-                <span>{videoTestSettings.screenShare ? 'Stop Sharing' : 'Share Screen'}</span>
-              </button>
-            </div>
-          </div>
-          
-          <div className="video-test-info">
-            <h4>Test your audio and video</h4>
-            <p>Make sure your microphone, camera, and speakers are working properly before joining a consultation.</p>
-            
-            <div className="device-settings">
-              <div className="device-setting">
-                <label>Microphone</label>
-                <select defaultValue="default">
-                  <option value="default">Default Microphone</option>
-                  <option value="mic2">External Microphone</option>
-                </select>
-              </div>
-              
-              <div className="device-setting">
-                <label>Camera</label>
-                <select defaultValue="default">
-                  <option value="default">Default Camera</option>
-                  <option value="camera2">External Camera</option>
-                </select>
-              </div>
-              
-              <div className="device-setting">
-                <label>Speakers</label>
-                <select defaultValue="default">
-                  <option value="default">Default Speakers</option>
-                  <option value="speakers2">External Speakers</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="video-test-actions">
-          <button className="btn-primary" onClick={() => setIsInVideoTest(false)}>
-            Complete Test
-          </button>
-          <button className="btn-outline" onClick={() => setVideoTestSettings({ audio: true, video: true, screenShare: false })}>
-            Reset Settings
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <div className="dashboard-min-height">
       {/* Enhanced Header */}
@@ -1048,25 +775,6 @@ function PatientDashboard() {
                   </div>
                 </div>
               </button>
-
-              <button 
-                className={`dashboard-sidebar-item`}
-                onClick={handleVideoTest}
-              >
-                <div className="dashboard-sidebar-item-content">
-                  <div className={`dashboard-sidebar-icon-container`}>
-                    <Video className="dashboard-sidebar-icon" />
-                  </div>
-                  <div className="dashboard-sidebar-text">
-                    <p className={`dashboard-sidebar-label`}>
-                      Video Test
-                    </p>
-                    <p className={`dashboard-sidebar-description`}>
-                      Test your audio and video
-                    </p>
-                  </div>
-                </div>
-              </button>
             </nav>
 
             <div className="dashboard-sidebar-bottom">
@@ -1126,8 +834,6 @@ function PatientDashboard() {
           </div>
         </main>
       </div>
-
-      {isInVideoTest && <VideoTestModal />}
     </div>
   );
 }
