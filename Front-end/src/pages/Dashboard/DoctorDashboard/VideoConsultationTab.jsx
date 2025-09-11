@@ -32,6 +32,7 @@ const VideoConsultationTab = () => {
   const [isVideoOn, setIsVideoOn] = useState(false);
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [isCallActive, setIsCallActive] = useState(false);
+  const [isSoundDetected, setIsSoundDetected] = useState(false);
   const [sessionDuration, setSessionDuration] = useState(0);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [consultationNotes, setConsultationNotes] = useState("");
@@ -122,6 +123,7 @@ const VideoConsultationTab = () => {
       setIsCallActive(true);
       setIsVideoOn(true);
       setIsAudioOn(true);
+      setIsSoundDetected(false);
       setSessionDuration(0);
       setConsultationNotes(`Video consultation with ${patient.name}\nCondition: ${patient.condition}\nStarted: ${new Date().toLocaleString()}\n\nNotes:\n`);
       
@@ -144,6 +146,7 @@ const VideoConsultationTab = () => {
     setIsCallActive(false);
     setIsVideoOn(false);
     setIsAudioOn(false);
+    setIsSoundDetected(false);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -168,6 +171,18 @@ const VideoConsultationTab = () => {
       }
     }
   };
+
+  // Simulate sound detection after 5 seconds
+  useEffect(() => {
+    if (isCallActive && !isSoundDetected) {
+      const timer = setTimeout(() => {
+        setIsSoundDetected(true);
+        setVitals(prev => ({...prev, heartRate: "72"}));
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isCallActive, isSoundDetected]);
 
   const handleSaveConsultation = () => {
     const consultationData = {
@@ -254,7 +269,7 @@ const VideoConsultationTab = () => {
                       
                       <div className="video-consultation-patient-details">
                         <h3 className="video-consultation-patient-name">{patient.name}</h3>
-                        <p className="video-consultation-patient-meta">Age: {patient.age} • {patient.condition}</p>
+                        <p className="video-consultation-patient-meta">Age: {patient.age}</p>
                         <div className="video-consultation-patient-time">
                           <Clock className="video-consultation-time-icon" />
                           <span className="video-consultation-time-text">Scheduled: {patient.appointmentTime}</span>
@@ -409,52 +424,51 @@ const VideoConsultationTab = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="video-consultation-vitals-content">
-                <div className="video-consultation-vitals-grid">
-                  <div className="video-consultation-vital-display">
-                    <Heart className="video-consultation-vital-display-icon" />
-                    <div>
-                      <p className="video-consultation-vital-label">Heart Rate</p>
-                      <p className="video-consultation-vital-value">74 bpm</p>
+                {!isSoundDetected ? (
+                  // Show waiting state until sound is detected
+                  <div className="video-consultation-waiting-sound">
+                    <div className="video-consultation-sound-waiting-icon">
+                      <div className="video-consultation-sound-wave">
+                        <div className="video-consultation-sound-bar"></div>
+                        <div className="video-consultation-sound-bar"></div>
+                        <div className="video-consultation-sound-bar"></div>
+                        <div className="video-consultation-sound-bar"></div>
+                        <div className="video-consultation-sound-bar"></div>
+                      </div>
                     </div>
+                    <p className="video-consultation-waiting-text">Waiting for heart sound detection...</p>
+                    <p className="video-consultation-waiting-subtext">Please place stethoscope on chest</p>
                   </div>
-                  <div className="video-consultation-vital-display">
-                    <Activity className="video-consultation-vital-display-icon" />
-                    <div>
-                      <p className="video-consultation-vital-label">Blood Pressure</p>
-                      <p className="video-consultation-vital-value">120/80</p>
+                ) : (
+                  // Show vitals when sound is detected
+                  <>
+                    <div className="video-consultation-vitals-grid">
+                      <div className="video-consultation-vital-display">
+                        <Heart className="video-consultation-vital-display-icon" />
+                        <div>
+                          <p className="video-consultation-vital-label">Heart Rate</p>
+                          <p className="video-consultation-vital-value">74 bpm</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="video-consultation-vital-display">
-                    <Thermometer className="video-consultation-vital-display-icon" />
-                    <div>
-                      <p className="video-consultation-vital-label">Temperature</p>
-                      <p className="video-consultation-vital-value">98.6°F</p>
+                    
+                    {/* Heart Rate Chart */}
+                    <div className="video-consultation-chart-container">
+                      <p className="video-consultation-chart-label">Heart Rate Trend</p>
+                      <div className="video-consultation-chart">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={heartRateData}>
+                            <XAxis dataKey="time" tick={{ fontSize: 10 }} />
+                            <YAxis domain={[60, 85]} tick={{ fontSize: 10 }} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="rate" stroke="hsl(197, 89%, 48%)" strokeWidth={2} dot={{ r: 3 }} />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
                     </div>
-                  </div>
-                  <div className="video-consultation-vital-display">
-                    <Droplets className="video-consultation-vital-display-icon" />
-                    <div>
-                      <p className="video-consultation-vital-label">SpO2</p>
-                      <p className="video-consultation-vital-value">98%</p>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Heart Rate Chart */}
-                <div className="video-consultation-chart-container">
-                  <p className="video-consultation-chart-label">Heart Rate Trend</p>
-                  <div className="video-consultation-chart">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={heartRateData}>
-                        <XAxis dataKey="time" tick={{ fontSize: 10 }} />
-                        <YAxis domain={[60, 85]} tick={{ fontSize: 10 }} />
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="rate" stroke="hsl(197, 89%, 48%)" strokeWidth={2} dot={{ r: 3 }} />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
+                  </>
+                )}
               </CardContent>
             </Card>
 
@@ -466,40 +480,19 @@ const VideoConsultationTab = () => {
               <CardContent className="video-consultation-vitals-input-content">
                 <div className="video-consultation-vitals-input-grid">
                   <div className="video-consultation-vitals-input-group">
-                    <Label className="video-consultation-vitals-input-label">Blood Pressure</Label>
-                    <Input
-                      value={vitals.bloodPressure}
-                      onChange={(e) => setVitals(prev => ({...prev, bloodPressure: e.target.value}))}
-                      placeholder="120/80"
-                      className="video-consultation-vitals-input"
-                    />
-                  </div>
-                  <div className="video-consultation-vitals-input-group">
                     <Label className="video-consultation-vitals-input-label">Heart Rate</Label>
                     <Input
                       value={vitals.heartRate}
                       onChange={(e) => setVitals(prev => ({...prev, heartRate: e.target.value}))}
                       placeholder="72 bpm"
                       className="video-consultation-vitals-input"
+                      disabled={!isSoundDetected}
                     />
-                  </div>
-                  <div className="video-consultation-vitals-input-group">
-                    <Label className="video-consultation-vitals-input-label">Temperature</Label>
-                    <Input
-                      value={vitals.temperature}
-                      onChange={(e) => setVitals(prev => ({...prev, temperature: e.target.value}))}
-                      placeholder="98.6°F"
-                      className="video-consultation-vitals-input"
-                    />
-                  </div>
-                  <div className="video-consultation-vitals-input-group">
-                    <Label className="video-consultation-vitals-input-label">O2 Saturation</Label>
-                    <Input
-                      value={vitals.oxygenSaturation}
-                      onChange={(e) => setVitals(prev => ({...prev, oxygenSaturation: e.target.value}))}
-                      placeholder="98%"
-                      className="video-consultation-vitals-input"
-                    />
+                    {!isSoundDetected && (
+                      <div className="video-consultation-input-overlay">
+                        <p className="video-consultation-input-waiting">Waiting for sound detection</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
@@ -516,36 +509,6 @@ const VideoConsultationTab = () => {
                   onChange={(e) => setConsultationNotes(e.target.value)}
                   placeholder="Take notes during consultation..."
                   className="video-consultation-notes-textarea"
-                />
-              </CardContent>
-            </Card>
-
-            {/* Diagnosis */}
-            <Card className="video-consultation-sidebar-card">
-              <CardHeader className="video-consultation-sidebar-card-header">
-                <CardTitle className="video-consultation-sidebar-card-title">Diagnosis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  value={diagnosis}
-                  onChange={(e) => setDiagnosis(e.target.value)}
-                  placeholder="Enter diagnosis..."
-                  className="video-consultation-diagnosis-textarea"
-                />
-              </CardContent>
-            </Card>
-
-            {/* Prescription */}
-            <Card className="video-consultation-sidebar-card">
-              <CardHeader className="video-consultation-sidebar-card-header">
-                <CardTitle className="video-consultation-sidebar-card-title">Prescription</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  value={prescription}
-                  onChange={(e) => setPrescription(e.target.value)}
-                  placeholder="Enter prescription details..."
-                  className="video-consultation-prescription-textarea"
                 />
               </CardContent>
             </Card>

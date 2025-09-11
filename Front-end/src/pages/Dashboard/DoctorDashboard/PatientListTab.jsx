@@ -13,9 +13,7 @@ import {
   Mail, 
   MapPin,
   Calendar,
-  User,
-  Heart,
-  Activity
+  User
 } from 'lucide-react';
 import { cn } from "../../../components/lib/utils";
 
@@ -34,18 +32,7 @@ const PatientListTab = () => {
       address: "123 Main St, City, State 12345",
       lastVisit: "2024-01-15",
       nextAppointment: "2024-01-22",
-      condition: "Hypertension",
-      status: "stable",
-      avatar: null,
-      bloodType: "O+",
-      allergies: ["Penicillin"],
-      medications: ["Lisinopril 10mg"],
-      vitals: {
-        bloodPressure: "130/85",
-        heartRate: "72",
-        temperature: "98.6°F",
-        weight: "145 lbs"
-      }
+      status: "stable"
     },
     {
       id: 2,
@@ -57,18 +44,7 @@ const PatientListTab = () => {
       address: "456 Oak Ave, City, State 12345",
       lastVisit: "2024-01-14",
       nextAppointment: "2024-01-25",
-      condition: "Diabetes Type 2",
-      status: "monitoring",
-      avatar: null,
-      bloodType: "A+",
-      allergies: ["None known"],
-      medications: ["Metformin 500mg", "Insulin"],
-      vitals: {
-        bloodPressure: "125/80",
-        heartRate: "68",
-        temperature: "98.4°F",
-        weight: "180 lbs"
-      }
+      status: "monitoring"
     },
     {
       id: 3,
@@ -80,18 +56,7 @@ const PatientListTab = () => {
       address: "789 Pine Rd, City, State 12345",
       lastVisit: "2024-01-13",
       nextAppointment: "2024-01-20",
-      condition: "Asthma",
-      status: "stable",
-      avatar: null,
-      bloodType: "B+",
-      allergies: ["Dust", "Pollen"],
-      medications: ["Albuterol inhaler"],
-      vitals: {
-        bloodPressure: "118/75",
-        heartRate: "75",
-        temperature: "98.7°F",
-        weight: "125 lbs"
-      }
+      status: "stable"
     },
     {
       id: 4,
@@ -103,18 +68,7 @@ const PatientListTab = () => {
       address: "321 Elm St, City, State 12345",
       lastVisit: "2024-01-12",
       nextAppointment: "2024-01-18",
-      condition: "Heart Disease",
-      status: "critical",
-      avatar: null,
-      bloodType: "AB+",
-      allergies: ["Aspirin"],
-      medications: ["Atorvastatin", "Metoprolol"],
-      vitals: {
-        bloodPressure: "145/95",
-        heartRate: "85",
-        temperature: "98.2°F",
-        weight: "200 lbs"
-      }
+      status: "critical"
     },
     {
       id: 5,
@@ -126,18 +80,7 @@ const PatientListTab = () => {
       address: "654 Cedar Dr, City, State 12345",
       lastVisit: "2024-01-11",
       nextAppointment: "2024-01-23",
-      condition: "Anxiety",
-      status: "improving",
-      avatar: null,
-      bloodType: "O-",
-      allergies: ["None known"],
-      medications: ["Sertraline 50mg"],
-      vitals: {
-        bloodPressure: "110/70",
-        heartRate: "65",
-        temperature: "98.5°F",
-        weight: "130 lbs"
-      }
+      status: "improving"
     }
   ];
 
@@ -151,7 +94,6 @@ const PatientListTab = () => {
 
   const filteredPatients = patients.filter(patient => {
     const matchesSearch = patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         patient.condition.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          patient.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesFilter = selectedFilter === 'all' || patient.status === selectedFilter;
     return matchesSearch && matchesFilter;
@@ -193,7 +135,7 @@ const PatientListTab = () => {
             <div className="patient-list-search-input-container">
               <Search className="patient-list-search-icon" />
               <Input
-                placeholder="Search patients by name, condition, or email..."
+                placeholder="Search patients by name or email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="patient-list-search-input"
@@ -257,41 +199,6 @@ const PatientListTab = () => {
                             <MapPin className="patient-info-icon" />
                             {patient.address}
                           </div>
-                        </div>
-                      </div>
-
-                      <div className="patient-info-section">
-                        <h4 className="patient-info-title">Medical Information</h4>
-                        <div className="patient-info-list">
-                          <p className="patient-info-text">
-                            <span className="patient-info-label">Condition:</span> {patient.condition}
-                          </p>
-                          <p className="patient-info-text">
-                            <span className="patient-info-label">Blood Type:</span> {patient.bloodType}
-                          </p>
-                          <p className="patient-info-text">
-                            <span className="patient-info-label">Allergies:</span> {patient.allergies.join(', ')}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="patient-info-section">
-                        <h4 className="patient-info-title">Recent Vitals</h4>
-                        <div className="patient-info-list">
-                          <div className="patient-info-item">
-                            <Heart className="patient-info-icon patient-vitals-heart" />
-                            BP: {patient.vitals.bloodPressure}
-                          </div>
-                          <div className="patient-info-item">
-                            <Activity className="patient-info-icon patient-vitals-activity" />
-                            HR: {patient.vitals.heartRate} bpm
-                          </div>
-                          <p className="patient-info-text">
-                            Temp: {patient.vitals.temperature}
-                          </p>
-                          <p className="patient-info-text">
-                            Weight: {patient.vitals.weight}
-                          </p>
                         </div>
                       </div>
 

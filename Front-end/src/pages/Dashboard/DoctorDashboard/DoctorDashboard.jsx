@@ -185,6 +185,13 @@ const DoctorDashboard = ({ doctorName = "Dr. Sarah Johnson" }) => {
                   <div className="overview-appointment-right">
                     <p className="overview-appointment-time">{appointment.time}</p>
                     <p className="overview-appointment-duration">{appointment.duration}</p>
+                    <Button 
+            onClick={() => window.location.href = "/dashboard/video-consultation"}
+            className="video-consultation-start-btn"
+          >
+            <Video className="video-consultation-btn-icon" />
+            Start Call
+          </Button>
                   </div>
                 </div>
               ))}

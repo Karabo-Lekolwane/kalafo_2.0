@@ -22,7 +22,7 @@ import {
   MapPin,
   Stethoscope
 } from 'lucide-react';
-import './PatientDashboard.css';
+import './Patient.css';
 
 function PatientDashboard() {
   const [activeTab, setActiveTab] = useState('overview');

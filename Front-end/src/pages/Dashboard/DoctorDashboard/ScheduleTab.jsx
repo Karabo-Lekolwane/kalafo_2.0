@@ -40,14 +40,16 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
   const [notes, setNotes] = useState("");
   const [duration, setDuration] = useState("30");
 
+  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
   const [appointments, setAppointments] = useState([
     {
       id: 1,
       patient: "Jane Doe",
       patientId: 1,
       time: "09:00 AM",
-      date: "2024-08-19",
-      weekday: "Monday",
+      date: new Date().toISOString().split('T')[0],
+      weekday: weekdays[new Date().getDay()],
       type: "Regular checkup",
       notes: "Patient reports feeling well",
       status: "scheduled",
@@ -58,8 +60,8 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
       patient: "John Smith", 
       patientId: 2,
       time: "02:30 PM",
-      date: "2024-08-20",
-      weekday: "Tuesday",
+      date: format(addDays(new Date(), 1), "yyyy-MM-dd"),
+      weekday: weekdays[addDays(new Date(), 1).getDay()],
       type: "Follow-up",
       notes: "Blood pressure monitoring",
       status: "scheduled",
@@ -70,8 +72,8 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
       patient: "Mary Johnson",
       patientId: 3,
       time: "11:15 AM", 
-      date: "2024-08-21",
-      weekday: "Wednesday",
+      date: format(addDays(new Date(), 2), "yyyy-MM-dd"),
+      weekday: weekdays[addDays(new Date(), 2).getDay()],
       type: "Consultation",
       notes: "Headache complaints",
       status: "scheduled",
@@ -93,8 +95,6 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
     "Emergency",
     "Specialist referral"
   ];
-
-  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const getWeekDates = (date) => {
     const start = startOfWeek(date);
@@ -267,6 +267,11 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
 
   const handleScheduleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!patientName || !appointmentType || !selectedTime) {
+      alert("Please fill in all required fields");
+      return;
+    }
     
     const selectedWeekday = weekdays[selectedDate.getDay()];
     
@@ -512,6 +517,7 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
           <CardContent>
             <form onSubmit={handleScheduleSubmit} className="scheduler-form">
               <div className="scheduler-grid">
+              </div>
                 <div className="scheduler-field">
                   <Label htmlFor="patientName" className="scheduler-label">Patient Name</Label>
                   <Input
@@ -524,82 +530,75 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
                   />
                 </div>
 
-                <div className="scheduler-field">
-                  <Label htmlFor="appointmentType" className="scheduler-label">Appointment Type</Label>
-                  <Select value={appointmentType} onValueChange={setAppointmentType}>
-                    <SelectTrigger className="scheduler-select-trigger">
-                      <SelectValue placeholder="Select appointment type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {appointmentTypes.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                              <div className="scheduler-field">
+                <Label htmlFor="appointmentType" className="scheduler-label">Appointment Type</Label>
+                <select
+                  id="appointmentType"
+                  value={appointmentType}
+                  onChange={(e) => setAppointmentType(e.target.value)}
+                  className="scheduler-select"
+                >
+                  <option value="">Select appointment type</option>
+                  <option value="Regular checkup">Regular checkup</option>
+                  <option value="Follow-up">Follow-up</option>
+                  <option value="Consultation">Consultation</option>
+                  <option value="Emergency">Emergency</option>
+                  <option value="Specialist referral">Specialist referral</option>
+                </select>
+              </div>
 
-                <div className="scheduler-field">
-                  <Label className="scheduler-label">Date</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="scheduler-date-btn"
-                      >
-                        <CalendarIcon className="scheduler-date-icon" />
-                        {selectedDate ? format(selectedDate, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="scheduler-date-popover" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        disabled={(date) => date < new Date()}
-                        initialFocus
-                        className="scheduler-calendar"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+              <div className="scheduler-field">
+                <Label htmlFor="time" className="scheduler-label">Time</Label>
+                <select
+                  id="time"
+                  value={selectedTime}
+                  onChange={(e) => setSelectedTime(e.target.value)}
+                  className="scheduler-select"
+                >
+                  <option value="">Select time slot</option>
+                  <option value="09:00 AM">09:00 AM</option>
+                  <option value="09:30 AM">09:30 AM</option>
+                  <option value="10:00 AM">10:00 AM</option>
+                  <option value="10:30 AM">10:30 AM</option>
+                  <option value="11:00 AM">11:00 AM</option>
+                  <option value="11:30 AM">11:30 AM</option>
+                  <option value="12:00 PM">12:00 PM</option>
+                  <option value="12:30 PM">12:30 PM</option>
+                  <option value="01:00 PM">01:00 PM</option>
+                  <option value="01:30 PM">01:30 PM</option>
+                  <option value="02:00 PM">02:00 PM</option>
+                  <option value="02:30 PM">02:30 PM</option>
+                  <option value="03:00 PM">03:00 PM</option>
+                  <option value="03:30 PM">03:30 PM</option>
+                  <option value="04:00 PM">04:00 PM</option>
+                  <option value="04:30 PM">04:30 PM</option>
+                  <option value="05:00 PM">05:00 PM</option>
+                  <option value="05:30 PM">05:30 PM</option>
+                  <option value="06:00 PM">06:00 PM</option>
+                  <option value="06:30 PM">06:30 PM</option>
+                  <option value="07:00 PM">07:00 PM</option>
+                  <option value="07:30 PM">07:30 PM</option>
+                  <option value="08:00 PM">08:00 PM</option>
+                  <option value="08:30 PM">08:30 PM</option>
+                </select>
+              </div>
 
-                <div className="scheduler-field">
-                  <Label htmlFor="time" className="scheduler-label">Time</Label>
-                  <Select value={selectedTime} onValueChange={setSelectedTime}>
-                    <SelectTrigger className="scheduler-select-trigger">
-                      <SelectValue placeholder="Select time slot" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {timeSlots.map((time) => (
-                        <SelectItem key={time} value={time}>
-                          <div className="scheduler-time-option">
-                            <Clock className="scheduler-time-icon" />
-                            {time}
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="scheduler-field">
-                  <Label htmlFor="duration" className="scheduler-label">Duration (minutes)</Label>
-                  <Select value={duration} onValueChange={setDuration}>
-                    <SelectTrigger className="scheduler-select-trigger">
-                      <SelectValue placeholder="Select duration" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="15">15 minutes</SelectItem>
-                      <SelectItem value="30">30 minutes</SelectItem>
-                      <SelectItem value="45">45 minutes</SelectItem>
-                      <SelectItem value="60">1 hour</SelectItem>
-                      <SelectItem value="90">1.5 hours</SelectItem>
-                      <SelectItem value="120">2 hours</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="scheduler-field">
+                <Label htmlFor="duration" className="scheduler-label">Duration (minutes)</Label>
+                <select
+                  id="duration"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  className="scheduler-select"
+                >
+                  <option value="">Select duration</option>
+                  <option value="15">15 minutes</option>
+                  <option value="30">30 minutes</option>
+                  <option value="45">45 minutes</option>
+                  <option value="60">1 hour</option>
+                  <option value="90">1.5 hours</option>
+                  <option value="120">2 hours</option>
+                </select>
               </div>
 
               <div className="scheduler-field">
@@ -672,6 +671,7 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
                   variant="ghost"
                   onClick={() => handleAddAppointment(dayName)}
                   className="schedule-add-day-btn"
+                  type="button"
                 >
                   +
                 </Button>
@@ -701,6 +701,7 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
                           variant="outline" 
                           className="schedule-reschedule-btn"
                           onClick={() => handleReschedule(appointment)}
+                          type="button"
                         >
                           Reschedule
                         </Button>
@@ -708,6 +709,7 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
                           size="sm" 
                           className="schedule-start-btn"
                           onClick={() => handleStartConsultation(appointment)}
+                          type="button"
                         >
                           Start
                         </Button>
@@ -751,6 +753,7 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
                       size="sm"
                       onClick={() => handleReschedule(appointment)}
                       className="schedule-today-reschedule-btn"
+                      type="button"
                     >
                       Reschedule
                     </Button>
@@ -758,6 +761,7 @@ export const ScheduleTab = ({ onStartVideoConsultation }) => {
                       size="sm" 
                       className="schedule-today-start-btn"
                       onClick={() => handleStartConsultation(appointment)}
+                      type="button"
                     >
                       Start Consultation
                     </Button>

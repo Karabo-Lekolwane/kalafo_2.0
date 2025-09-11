@@ -45,12 +45,7 @@ const DashboardSidebar = ({ activeTab, setActiveTab }) => {
       icon: FileText,
       description: 'Medical records & history'
     },
-    { 
-      id: 'analytics', 
-      label: 'Analytics', 
-      icon: BarChart3,
-      description: 'Reports & insights'
-    },
+    
   ];
 
   return (

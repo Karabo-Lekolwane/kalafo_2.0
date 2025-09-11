@@ -737,15 +737,7 @@ function PatientDashboard() {
               <div className="patient-info-section">
                 <p className="patient-info-title">Date of Birth</p>
                 <p className="patient-info-text">January 15, 1985</p>
-              </div>
-              <div className="patient-info-section">
-                <p className="patient-info-title">Blood Type</p>
-                <p className="patient-info-text">O+</p>
-              </div>
-              <div className="patient-info-section">
-                <p className="patient-info-title">Allergies</p>
-                <p className="patient-info-text">Penicillin, Pollen</p>
-              </div>
+              </div>            
             </div>
           </div>
         </div>
@@ -764,11 +756,7 @@ function PatientDashboard() {
               <div className="patient-info-item">
                 <span className="patient-info-label">Primary Doctor:</span>
                 <span>Dr. Sarah Johnson</span>
-              </div>
-              <div className="patient-info-item">
-                <span className="patient-info-label">Conditions:</span>
-                <span>Hypertension, Asthma</span>
-              </div>
+              </div>              
               <div className="patient-info-item">
                 <span className="patient-info-label">Last Updated:</span>
                 <span>January 20, 2024</span>

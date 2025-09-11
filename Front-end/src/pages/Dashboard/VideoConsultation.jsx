@@ -1,6 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import './VideoConsultation.css';
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Textarea } from "../../../components/ui/textarea";
+import { Badge } from "../../../components/ui/badge";
+import { Avatar, AvatarFallback } from "../../../components/ui/avatar";
+import { 
+  Video, 
+  VideoOff, 
+  Mic, 
+  MicOff, 
+  Phone, 
+  PhoneOff,
+  Users,
+  Clock,
+  Heart,
+  Activity,
+  Thermometer,
+  Droplets,
+  MonitorSpeaker,
+  User,
+  Calendar,
+  FileText,
+  Save
+} from 'lucide-react';
+import { cn } from "../../../components/lib/utils";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
   const [isCallActive, setIsCallActive] = useState(false);
@@ -17,12 +45,61 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
   const [isRecording, setIsRecording] = useState(false);
   const [deviceStatus, setDeviceStatus] = useState('disconnected'); // disconnected, connecting, connected
   const [selectedBodyPart, setSelectedBodyPart] = useState('heart');
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [consultationNotes, setConsultationNotes] = useState("");
+  const [diagnosis, setDiagnosis] = useState("");
+  const [prescription, setPrescription] = useState("");
+  const [sessionDuration, setSessionDuration] = useState(0);
 
   const { user } = useAuth();
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const localStreamRef = useRef(null);
   const peerConnectionRef = useRef(null);
+  const intervalRef = useRef(null);
+
+  // Mock patient data for consultation
+  const availablePatients = [
+    {
+      id: 1,
+      name: "Emily Carter",
+      age: 28,
+      appointmentTime: "10:00 AM",
+      condition: "Hypertension Follow-up",
+      lastVitals: {
+        bloodPressure: "130/85",
+        heartRate: "72",
+        temperature: "98.6°F",
+        oxygenSaturation: "98%"
+      }
+    },
+    {
+      id: 2,
+      name: "Michael Rodriguez", 
+      age: 45,
+      appointmentTime: "11:30 AM",
+      condition: "Diabetes Consultation",
+      lastVitals: {
+        bloodPressure: "125/80",
+        heartRate: "68",
+        temperature: "98.4°F",
+        oxygenSaturation: "97%"
+      }
+    },
+    {
+      id: 3,
+      name: "Jennifer Liu",
+      age: 32,
+      appointmentTime: "2:15 PM",
+      condition: "Asthma Check-up",
+      lastVitals: {
+        bloodPressure: "118/75",
+        heartRate: "75",
+        temperature: "98.7°F",
+        oxygenSaturation: "96%"
+      }
+    }
+  ];
 
   // Simulate real-time health data updates
   useEffect(() => {
@@ -75,7 +152,7 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
     return baseData;
   };
 
-  const startCall = async () => {
+  const startCall = async (patient = null) => {
     try {
       // Get user media
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -112,6 +189,16 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
       setIsCallActive(true);
       setDeviceStatus('connected');
       
+      if (patient) {
+        setSelectedPatient(patient);
+        setConsultationNotes(`Video consultation with ${patient.name}\nCondition: ${patient.condition}\nStarted: ${new Date().toLocaleString()}\n\nNotes:\n`);
+      }
+      
+      // Start timer
+      intervalRef.current = setInterval(() => {
+        setSessionDuration(prev => prev + 1);
+      }, 1000);
+      
       console.log('Video call started');
     } catch (error) {
       console.error('Error starting video call:', error);
@@ -131,6 +218,10 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
     setIsCallActive(false);
     setIsRecording(false);
     setDeviceStatus('disconnected');
+    
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     
     if (onEndCall) {
       onEndCall();
@@ -173,15 +264,139 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
     return { status: 'normal', color: '#27ae60' };
   };
 
+  const formatDuration = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleSaveConsultation = () => {
+    const consultationData = {
+      patientId: selectedPatient ? selectedPatient.id : patientId,
+      patientName: selectedPatient ? selectedPatient.name : "Unknown Patient",
+      date: new Date().toISOString(),
+      duration: sessionDuration,
+      notes: consultationNotes,
+      diagnosis,
+      prescription,
+      vitals: healthData
+    };
+    
+    console.log('Saving consultation:', consultationData);
+    alert('Consultation record saved successfully!');
+    
+    // Reset form
+    endCall();
+    setSelectedPatient(null);
+    setConsultationNotes("");
+    setDiagnosis("");
+    setPrescription("");
+    setHealthData({
+      heartRate: 72,
+      bloodPressure: '120/80',
+      oxygenSaturation: 98,
+      temperature: 98.6,
+      respiratoryRate: 16
+    });
+  };
+
   const heartRateStatus = getHeartRateStatus(healthData.heartRate);
 
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  // If we have patient selection UI (for doctors)
+  if (user?.role === 'doctor' && !isCallActive) {
+    return (
+      <div className="video-consultation">
+        <div className="consultation-header">
+          <h2>🩺 Live Consultation</h2>
+          <div className="consultation-info">
+            <span>Select a patient to begin consultation</span>
+          </div>
+        </div>
+
+        <div className="video-consultation-waiting-room">
+          <Card className="video-consultation-card">
+            <CardHeader>
+              <CardTitle className="video-consultation-card-title">
+                <Users className="video-consultation-card-icon" />
+                Scheduled Consultations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="video-consultation-patient-list">
+                {availablePatients.map((patient) => (
+                  <div 
+                    key={patient.id}
+                    className="video-consultation-patient-item"
+                  >
+                    <div className="video-consultation-patient-info">
+                      <Avatar className="video-consultation-patient-avatar">
+                        <AvatarFallback className="video-consultation-patient-avatar-fallback">
+                          {patient.name.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="video-consultation-patient-details">
+                        <h3 className="video-consultation-patient-name">{patient.name}</h3>
+                        <p className="video-consultation-patient-meta">Age: {patient.age}</p>
+                        <div className="video-consultation-patient-time">
+                          <Clock className="video-consultation-time-icon" />
+                          <span className="video-consultation-time-text">Scheduled: {patient.appointmentTime}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="video-consultation-patient-actions">
+                      <div className="video-consultation-patient-vitals">
+                        <p className="video-consultation-vitals-label">Last Vitals:</p>
+                        <div className="video-consultation-vitals-details">
+                          <div className="video-consultation-vital-item">
+                            <Heart className="video-consultation-vital-icon" />
+                            {patient.lastVitals.heartRate} bpm
+                          </div>
+                          <div className="video-consultation-vital-item">
+                            <Activity className="video-consultation-vital-icon" />
+                            {patient.lastVitals.bloodPressure}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        onClick={() => startCall(patient)}
+                        className="video-consultation-start-btn"
+                      >
+                        <Video className="video-consultation-btn-icon" />
+                        Start Call
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Main consultation UI
   return (
     <div className="video-consultation">
       <div className="consultation-header">
         <h2>🩺 Live Consultation</h2>
         <div className="consultation-info">
-          <span>Patient ID: {patientId}</span>
+          <span>Patient ID: {selectedPatient ? selectedPatient.id : patientId}</span>
           <span>Session: {consultationId}</span>
+          {isCallActive && (
+            <span>Duration: {formatDuration(sessionDuration)}</span>
+          )}
           <div className={`device-status ${deviceStatus}`}>
             <span className="status-indicator"></span>
             {deviceStatus === 'connected' ? 'Devices Connected' : 'Devices Disconnected'}
@@ -201,7 +416,7 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
                 className="video-element"
               />
               <div className="video-label">
-                {user?.role === 'doctor' ? 'Patient' : 'Doctor'}
+                {user?.role === 'doctor' ? (selectedPatient ? selectedPatient.name : 'Patient') : 'Doctor'}
               </div>
             </div>
             
@@ -219,7 +434,7 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
 
           <div className="video-controls">
             {!isCallActive ? (
-              <button className="control-btn start-call" onClick={startCall}>
+              <button className="control-btn start-call" onClick={() => startCall()}>
                 📹 {user?.role === 'doctor' ? 'Start Consultation' : 'Join Call'}
               </button>
             ) : (
@@ -228,18 +443,18 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
                   className={`control-btn ${isMuted ? 'muted' : ''}`}
                   onClick={toggleMute}
                 >
-                  {isMuted ? '🔇' : '🎤'}
+                  {isMuted ? <MicOff size={20} /> : <Mic size={20} />}
                 </button>
                 
                 <button 
                   className={`control-btn ${!isVideoOn ? 'video-off' : ''}`}
                   onClick={toggleVideo}
                 >
-                  {isVideoOn ? '📹' : '📷'}
+                  {isVideoOn ? <Video size={20} /> : <VideoOff size={20} />}
                 </button>
                 
                 <button className="control-btn end-call" onClick={endCall}>
-                  📞 End Call
+                  <PhoneOff size={20} /> End Call
                 </button>
               </>
             )}
@@ -379,13 +594,24 @@ function VideoConsultation({ consultationId, patientId, doctorId, onEndCall }) {
         </div>
       </div>
 
+      {/* Consultation Notes */}
+      <div className="consultation-notes">
+        <h3>📝 Consultation Notes</h3>
+        <Textarea
+          value={consultationNotes}
+          onChange={(e) => setConsultationNotes(e.target.value)}
+          placeholder="Record your observations and notes here..."
+          rows={6}
+        />
+      </div>
+
       {/* Emergency Controls */}
       {user?.role === 'doctor' && (
         <div className="emergency-controls">
           <button className="emergency-btn">
             🚨 Emergency Protocol
           </button>
-          <button className="emergency-btn">
+          <button className="emergency-btn" onClick={handleSaveConsultation}>
             📝 Save Session Notes
           </button>
         </div>
